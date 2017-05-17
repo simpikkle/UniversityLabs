@@ -48,4 +48,10 @@ public class Lab2 {
         randomMap.put(2, Picture::new);
         randomMap.put(3, Toy::new);
     }
+
+    public static void main(String[] args) {
+        Lab2 lab2 = new Lab2(new Random().nextInt(32));
+        System.out.println(lab2.allProducts());
+        System.out.println(lab2.presentOnly());
+    }
 }
