@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="267.0" prefWidth="493.0" tabClosingPolicy="UNAVAILABLE" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="main.Controller">
+  <tabs>
+    <Tab text="Lab 1">
+      <content>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="235.0" prefWidth="496.0">
+               <children>
+                  <Pane layoutX="14.0" layoutY="14.0" prefHeight="338.0" prefWidth="578.0">
+                     <children>
+                        <Button fx:id="calcButton" defaultButton="true" layoutX="295.0" layoutY="49.0" mnemonicParsing="false" onAction="#onCalcAction" text="Calc" />
+                        <TextField fx:id="expressionField" layoutX="117.0" layoutY="49.0" promptText="Input the expression" />
+                        <TextField fx:id="answerField" prefWidth="250" layoutX="117.0" layoutY="114.0" editable="false "/>
+                        <Label layoutX="117.0" layoutY="97.0" text="Answer" />
+                     </children>
+                  </Pane>
+               </children></AnchorPane>
+      </content>
+    </Tab>
+    <Tab text="Lab 2">
+      <content>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <TextArea fx:id="resultTwo" layoutX="14.0" layoutY="42.0" prefHeight="176.0" prefWidth="466.0" wrapText="true" />
+                  <Button fx:id="executeTwo" defaultButton="true" layoutX="14.0" layoutY="8.0" mnemonicParsing="false" onAction="#onExecuteSecond" text="Execute" />
+               </children></AnchorPane>
+      </content>
+    </Tab>
+      <Tab text="Lab 3">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <Button fx:id="executeThree" onAction="#onExecuteThird" defaultButton="true" layoutX="14.0" layoutY="7.0" mnemonicParsing="false" text="Execute" />
+                  <TextArea fx:id="resultThree" layoutX="14.0" layoutY="41.0" prefHeight="179.0" prefWidth="470.0" wrapText="true" />
+               </children>
+            </AnchorPane>
+        </content>
+      </Tab>
+      <Tab text="Lab 4">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <TextField fx:id="nThreads" layoutX="391.0" layoutY="14.0" prefHeight="27.0" prefWidth="89.0" />
+                  <TextField fx:id="nRows" layoutX="391.0" layoutY="51.0" prefHeight="27.0" prefWidth="90.0" />
+                  <TextArea fx:id="resultFourth" layoutX="14.0" layoutY="98.0" prefHeight="130.0" prefWidth="467.0" wrapText="true" />
+                  <Label layoutX="300.0" layoutY="19.0" text="N Threads" />
+                  <Label layoutX="317.0" layoutY="57.0" text="N Rows" />
+                  <Button fx:id="executeFourth" defaultButton="true" layoutX="14.0" layoutY="65.0" mnemonicParsing="false" onAction="#onExecuteFourth" text="Execute" />
+               </children>
+            </AnchorPane>
+        </content>
+      </Tab>
+  </tabs>
+</TabPane>
