@@ -1,0 +1,9 @@
+root@debian:/home/user/labs/linuxsh/lab8/example# echo "Test" > /dev/chardev
+root@debian:/home/user/labs/linuxsh/lab8/example# cat /dev/chardev
+Test
+root@debian:/home/user/labs/linuxsh/lab8/example# echo "msg_delete" > /dev/chardev
+root@debian:/home/user/labs/linuxsh/lab8/example# cat /dev/chardev
+
+mknod /dev/chardev c 100 0
+
+

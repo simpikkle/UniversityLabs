@@ -1,0 +1,103 @@
+make[1]: Entering directory '/home/user/labs/linuxsh/lab9/lmbench-3.0-a9/results'
+
+                 L M B E N C H  3 . 0   S U M M A R Y
+                 ------------------------------------
+		 (Alpha software, do not distribute)
+
+Basic system parameters
+------------------------------------------------------------------------------
+Host                 OS Description              Mhz  tlb  cache  mem   scal
+                                                     pages line   par   load
+                                                           bytes  
+--------- ------------- ----------------------- ---- ----- ----- ------ ----
+debian    Linux 3.16.39        x86_64-linux-gnu 3034    32   128 8.1100    1
+debian    Linux 3.16.39        x86_64-linux-gnu 2999    32   128 5.2100    1
+
+Processor, Processes - times in microseconds - smaller is better
+------------------------------------------------------------------------------
+Host                 OS  Mhz null null      open slct sig  sig  fork exec sh  
+                             call  I/O stat clos TCP  inst hndl proc proc proc
+--------- ------------- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+debian    Linux 3.16.39 3034 0.05 0.09 0.29 0.78 2.36 0.12 0.80 90.5 289. 620.
+debian    Linux 3.16.39 2999 0.04 0.10 0.29 0.82 2.27 0.12 0.78 94.1 304. 728.
+
+Basic integer operations - times in nanoseconds - smaller is better
+-------------------------------------------------------------------
+Host                 OS  intgr intgr  intgr  intgr  intgr  
+                          bit   add    mul    div    mod   
+--------- ------------- ------ ------ ------ ------ ------ 
+debian    Linux 3.16.39 0.3300 0.1700 1.0100 7.9700 8.3800
+debian    Linux 3.16.39 0.3600 0.1900 1.0800 8.3000 8.3500
+
+Basic uint64 operations - times in nanoseconds - smaller is better
+------------------------------------------------------------------
+Host                 OS int64  int64  int64  int64  int64  
+                         bit    add    mul    div    mod   
+--------- ------------- ------ ------ ------ ------ ------ 
+debian    Linux 3.16.39  0.340        1.0000   14.2   14.3
+debian    Linux 3.16.39  0.330        1.0100   14.3   14.4
+
+Basic float operations - times in nanoseconds - smaller is better
+-----------------------------------------------------------------
+Host                 OS  float  float  float  float
+                         add    mul    div    bogo
+--------- ------------- ------ ------ ------ ------ 
+debian    Linux 3.16.39 1.0000 1.0000 3.7300 0.8500
+debian    Linux 3.16.39 1.0500 1.1400 3.8500 0.8500
+
+Basic double operations - times in nanoseconds - smaller is better
+------------------------------------------------------------------
+Host                 OS  double double double double
+                         add    mul    div    bogo
+--------- ------------- ------  ------ ------ ------ 
+debian    Linux 3.16.39 1.0100 0.9900 4.7300 1.5300
+debian    Linux 3.16.39 1.0100 1.0100 4.7500 1.5100
+
+Context switching - times in microseconds - smaller is better
+-------------------------------------------------------------------------
+Host                 OS  2p/0K 2p/16K 2p/64K 8p/16K 8p/64K 16p/16K 16p/64K
+                         ctxsw  ctxsw  ctxsw ctxsw  ctxsw   ctxsw   ctxsw
+--------- ------------- ------ ------ ------ ------ ------ ------- -------
+debian    Linux 3.16.39 0.5400 0.8800 1.2800 1.0900 2.9200 1.32000 2.12000
+debian    Linux 3.16.39 0.6200 0.7700 0.7800 1.0100 1.6100 1.28000 1.59000
+
+*Local* Communication latencies in microseconds - smaller is better
+---------------------------------------------------------------------
+Host                 OS 2p/0K  Pipe AF     UDP  RPC/   TCP  RPC/ TCP
+                        ctxsw       UNIX         UDP         TCP conn
+--------- ------------- ----- ----- ---- ----- ----- ----- ----- ----
+debian    Linux 3.16.39 0.540 2.110 2.49 3.196 5.511 4.490 7.998  81.
+debian    Linux 3.16.39 0.620 2.133 2.82 3.228 6.100 4.707 7.782  16.
+
+*Remote* Communication latencies in microseconds - smaller is better
+---------------------------------------------------------------------
+Host                 OS   UDP  RPC/  TCP   RPC/ TCP
+                               UDP         TCP  conn
+--------- ------------- ----- ----- ----- ----- ----
+debian    Linux 3.16.39                             
+debian    Linux 3.16.39                             
+
+File & VM system latencies in microseconds - smaller is better
+-------------------------------------------------------------------------------
+Host                 OS   0K File      10K File     Mmap    Prot   Page   100fd
+                        Create Delete Create Delete Latency Fault  Fault  selct
+--------- ------------- ------ ------ ------ ------ ------- ----- ------- -----
+debian    Linux 3.16.39 9.5773 5.3959   58.9 9.2836   11.6K 0.285 0.20870 0.860
+debian    Linux 3.16.39 5.5582 5.9120   82.2 8.7576  5671.0 0.274 0.21550 0.899
+
+*Local* Communication bandwidths in MB/s - bigger is better
+-----------------------------------------------------------------------------
+Host                OS  Pipe AF    TCP  File   Mmap  Bcopy  Bcopy  Mem   Mem
+                             UNIX      reread reread (libc) (hand) read write
+--------- ------------- ---- ---- ---- ------ ------ ------ ------ ---- -----
+debian    Linux 3.16.39 3540 6033 2707 7028.1  11.6K 8631.0 5848.3 11.K 7936.
+debian    Linux 3.16.39 6345 6832 4380 5678.4  11.3K 6780.3 5729.1 8900 7487.
+
+Memory latencies in nanoseconds - smaller is better
+    (WARNING - may not be correct, check graphs)
+------------------------------------------------------------------------------
+Host                 OS   Mhz   L1 $   L2 $    Main mem    Rand mem    Guesses
+--------- -------------   ---   ----   ----    --------    --------    -------
+debian    Linux 3.16.39  3034     -      -           -    Bad mhz?
+debian    Linux 3.16.39  2999 1.3920 7.8330        21.3       175.6
+make[1]: Leaving directory '/home/user/labs/linuxsh/lab9/lmbench-3.0-a9/results'

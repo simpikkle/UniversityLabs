@@ -1,0 +1,67 @@
+%fakemin-X 2
+%fakemin-Y 0.54
+%fakemax-X 96
+%fakemax-Y 11.54
+"%X Processes 
+"%Y Time in microseconds
+"%T Context switches for Linux GNU/LinuxMhz
+"Process size=0k	overhead=0.61
+2 0.54
+4 0.67
+8 0.86
+16 0.74
+24 0.81
+32 0.76
+64 1.06
+96 1.28
+
+"Process size=4k	overhead=0.60
+2 0.65
+4 0.71
+8 0.80
+16 0.92
+24 1.21
+32 1.25
+64 1.44
+96 1.66
+
+"Process size=8k	overhead=0.73
+2 0.72
+4 0.82
+8 0.96
+16 1.19
+24 1.25
+32 1.44
+64 1.88
+96 2.65
+
+"Process size=16k	overhead=0.97
+2 0.88
+4 1.02
+8 1.09
+16 1.32
+24 1.51
+32 1.61
+64 2.23
+96 2.43
+
+"Process size=32k	overhead=1.59
+2 0.85
+4 1.21
+8 1.32
+16 2.59
+24 3.92
+32 4.16
+64 5.58
+96 8.31
+
+"Process size=64k	overhead=2.94
+2 1.28
+4 1.24
+8 2.92
+16 2.12
+24 3.55
+32 10.11
+64 9.95
+96 11.54
+
