@@ -1,0 +1,18 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>icons/logo.png</file>
+        <file>icons/settings.png</file>
+        <file>icons/statistic.png</file>
+        <file>icons/bird.png</file>
+        <file>icons/bird1.png</file>
+        <file>icons/man-success.png</file>
+        <file>icons/about.png</file>
+        <file>icons/bird2.png</file>
+        <file>icons/trayIcon.png</file>
+        <file>icons/delete.png</file>
+        <file>icons/bubble.png</file>
+        <file>icons/play.png</file>
+        <file>icons/stop.png</file>
+        <file>icons/plus.png</file>
+    </qresource>
+</RCC>
