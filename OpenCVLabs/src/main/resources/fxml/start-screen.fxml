@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+
+<GridPane alignment="center" hgap="10" maxHeight="514.0" maxWidth="841.0" minHeight="372.0" minWidth="535.0" prefHeight="514.0" prefWidth="841.0" vgap="10" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.app.controller.Controller">
+   <columnConstraints>
+      <ColumnConstraints />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints />
+   </rowConstraints>
+   <children>
+      <Pane maxHeight="531.0" maxWidth="867.0" minHeight="500.0" minWidth="610.0" prefHeight="510.0" prefWidth="867.0">
+         <children>
+            <Pane fx:id="startBlock" layoutX="264.0" layoutY="61.0" prefHeight="319.0" prefWidth="314.0">
+               <children>
+                  <Label layoutX="30.0" layoutY="123.0" prefHeight="63.0" prefWidth="266.0" text="Welcome to OpenCV UI. Let's get started!" textFill="#727272" wrapText="true" />
+                  <Button fx:id="getStarted" layoutX="105.0" layoutY="204.0" mnemonicParsing="false" onAction="#onGetStartedClick" style="-fx-padding: 10; -fx-background-color: #46bb77; -fx-cursor: pointer;" text="Get started" textFill="#f2f2f2">
+                     <font>
+                        <Font name="Tahoma Bold" size="18.0" />
+                     </font>
+                  </Button>
+               </children>
+            </Pane>
+            <Pane fx:id="workBlock" layoutX="5.0" layoutY="-1.0" prefHeight="511.0" prefWidth="841.0" visible="false">
+               <children>
+                  <Pane layoutX="-3.0" layoutY="328.0" prefHeight="184.0" prefWidth="609.0" style="-fx-background-color: ececec;">
+                     <children>
+                        <Pane layoutY="14.0" prefHeight="156.0" prefWidth="187.0">
+                           <children>
+                              <CheckBox fx:id="grayCheckBox" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#changeColor" text="Gray scale" />
+                              <CheckBox fx:id="logoCheckBox" layoutX="14.0" layoutY="42.0" mnemonicParsing="false" onAction="#showLogo" text="Show logo" />
+                              <CheckBox fx:id="histogramCheckBox" layoutX="14.0" layoutY="69.0" mnemonicParsing="false" onAction="#showHistogram" text="Show histogram" />
+                              <CheckBox fx:id="faceCheckBox" layoutX="14.0" layoutY="97.0" mnemonicParsing="false" onAction="#detectFaces" text="Start face detection" />
+                           </children>
+                        </Pane>
+                        <Button fx:id="takeScreenshot" layoutX="476.0" layoutY="145.0" mnemonicParsing="false" onAction="#takeScreenshot" text="Take Screenshot" />
+                        <ImageView fx:id="histogram" fitHeight="150.0" fitWidth="245.0" layoutX="156.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true" />
+                     </children>
+                  </Pane>
+                  <ImageView fx:id="cameraView" fitHeight="319.0" fitWidth="609.0" layoutX="-2.0" pickOnBounds="true" preserveRatio="true" />
+                  <Pane fx:id="faceBlock" layoutX="607.0" prefHeight="514.0" prefWidth="228.0" visible="false">
+                     <children>
+                        <Label layoutX="26.0" layoutY="37.0" text="Number of people:" />
+                        <Label fx:id="nPeople" layoutX="26.0" layoutY="79.0" text="0" />
+                        <Label fx:id="dPeople" layoutX="26.0" layoutY="161.0" text="0" />
+                        <Label layoutX="26.0" layoutY="119.0" text="Distance to people:" />
+                     </children>
+                  </Pane>
+               </children>
+            </Pane>
+         </children>
+      </Pane>
+   </children>
+</GridPane>
