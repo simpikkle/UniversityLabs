@@ -10,8 +10,8 @@ import static java.util.Arrays.stream;
 public class Criterion {
 
     private List<List<Integer>> matrixList;
-    private int rowSize;
-    private int columnSize;
+    private int numberOfRows;
+    private int numberOfColumns;
     private Integer[][] matrix;
 
     public Criterion(List<List<Integer>> matrixList) {
@@ -20,12 +20,12 @@ public class Criterion {
     }
 
     private void fillMatrix() {
-        rowSize = matrixList.size();
-        columnSize = matrixList.get(0).size();
-        matrix = new Integer[rowSize][columnSize];
+        numberOfRows = matrixList.size();
+        numberOfColumns = matrixList.get(0).size();
+        matrix = new Integer[numberOfRows][numberOfColumns];
         int i = 0;
-        for (List<Integer> row: matrixList){
-            for (int j = 0; j < columnSize; j++) {
+        for (List<Integer> row : matrixList) {
+            for (int j = 0; j < numberOfColumns; j++) {
                 matrix[i][j] = row.get(j);
             }
             i++;
@@ -36,11 +36,11 @@ public class Criterion {
 
     public Integer minMax() {
         Logger.log("\nMinMax criterion");
-        Integer[] columnMin = new Integer[columnSize];
+        Integer[] columnMin = new Integer[numberOfColumns];
         Logger.log("\nColumns' minimums: \n");
-        for (int j = 0; j < columnSize; j++) {
+        for (int j = 0; j < numberOfColumns; j++) {
             columnMin[j] = matrix[0][j];
-            for (int i = 0; i < rowSize; i++) {
+            for (int i = 0; i < numberOfRows; i++) {
                 if (matrix[i][j] < columnMin[j]) {
                     columnMin[j] = matrix[i][j];
                 }
@@ -55,25 +55,25 @@ public class Criterion {
     public Integer savage() {
 
         Logger.log("\nSavage criterion");
-        Integer[] columnMax = new Integer[columnSize];
-        Integer[][] riskMatrix = new Integer[rowSize][columnSize];
+        Integer[] columnMax = new Integer[numberOfColumns];
+        Integer[][] riskMatrix = new Integer[numberOfRows][numberOfColumns];
         Logger.log("\nColumns' maximum: \n");
-        for (int j = 0; j < columnSize; j++) {
+        for (int j = 0; j < numberOfColumns; j++) {
             columnMax[j] = matrix[0][j];
             // Find max in column
-            for (int i = 0; i < rowSize; i++) {
+            for (int i = 0; i < numberOfRows; i++) {
                 if (matrix[i][j] > columnMax[j]) {
                     columnMax[j] = matrix[i][j];
                 }
             }
             Logger.log("\t" + columnMax[j]);
             // Fill risk matrix
-            for (int i = 0; i < rowSize; i++) {
+            for (int i = 0; i < numberOfRows; i++) {
                 riskMatrix[i][j] = columnMax[j] - matrix[i][j];
             }
         }
-        Integer[] maxRiskPerRow = new Integer[rowSize];
-        for (int i = 0; i < rowSize; i++) {
+        Integer[] maxRiskPerRow = new Integer[numberOfRows];
+        for (int i = 0; i < numberOfRows; i++) {
             maxRiskPerRow[i] = stream(riskMatrix[i]).max(Comparator.naturalOrder()).get();
             Logger.log("\n Max risk per row: " + maxRiskPerRow[i]);
         }
@@ -83,21 +83,25 @@ public class Criterion {
         return result;
     }
 
-    public Integer hurwicz() {
+    public Float hurwicz() {
         Logger.log("\nHurwicz criterion");
-        Integer[] columnMin = new Integer[columnSize];
-        Logger.log("\nColumns' minimums: \n");
-        for (int j = 0; j < columnSize; j++) {
-            columnMin[j] = matrix[0][j];
-            for (int i = 0; i < rowSize; i++) {
-                if (matrix[i][j] < columnMin[j]) {
-                    columnMin[j] = matrix[i][j];
+        float c = 0.25f;
+        Float[] resultPerRow = new Float[numberOfRows];
+        for (int i = 0; i < numberOfRows; i++) {
+            int min = matrix[i][0];
+            int max = matrix[i][0];
+            for (int j = 0; j < numberOfColumns; j++) {
+                if (matrix[i][j] > max) {
+                    max = matrix[i][j];
                 }
+                if (matrix[i][j] < min) {
+                    min = matrix[i][j];
+                }
+                resultPerRow[i] = c * min + (1 - c) * max;
             }
-            Logger.log("\t" + columnMin[j]);
         }
-        Integer result = stream(columnMin).max(Comparator.naturalOrder()).get();
-        Logger.log("\nHurwicz criterion result (max of min) is " + result);
+        Float result = stream(resultPerRow).max(Comparator.naturalOrder()).get();
+        Logger.log("\nHurwicz criterion result is " + result);
         return result;
     }
 }
