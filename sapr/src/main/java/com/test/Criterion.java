@@ -104,4 +104,27 @@ public class Criterion {
         Logger.log("\nHurwicz criterion result is " + result);
         return result;
     }
+
+    public float bl(float[] probabilities, float[] amount) {
+        Logger.log("\nB-L criterion");
+        Float[] rowSum = new Float[numberOfRows];
+        for (int i = 0; i < numberOfRows; i++) {
+            rowSum[i] = 0f;
+            for (int j = 0; j < numberOfColumns; j++) {
+                rowSum[i] += matrix[i][j] * probabilities[j];
+            }
+        }
+        float maxSum = 0f;
+        int maxRowIndex = 0;
+        for (int i = 0; i < numberOfRows; i++) {
+            if (maxSum < rowSum[i]) {
+                maxSum = rowSum[i];
+                maxRowIndex = i;
+            }
+        }
+        Float result = stream(rowSum).max(Comparator.naturalOrder()).get();
+        Logger.log("\nB-L result is " + result);
+        Logger.log("\nAmount to order is " + amount[maxRowIndex]);
+        return result;
+    }
 }
