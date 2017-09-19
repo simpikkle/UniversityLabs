@@ -10,7 +10,7 @@ public class UserDao {
     private static final Logger logger = LogManager.getLogger(UserDao.class);
 
     public String getPasswordByUser(String username) throws DatabaseException {
-        String query = "select password from user where username=:username";
+        String query = "select pass from lib_user where username = :username";
         try(Connection connection = DbConnection.getConnection()) {
             return connection.createQuery(query)
                     .addParameter("username", username)

@@ -25,6 +25,7 @@ public class LoginController {
     public void runAuthentication() {
         try {
             new Authentication().runAuthentication(usernameInput.getText(), passwordInput.getText());
+            // TODO open main window
         } catch (DatabaseException | AuthenticationException e) {
             exceptionLabel.setText(e.getMessage());
             exceptionLabel.setVisible(true);
