@@ -1,12 +1,11 @@
 package com.library.domain;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.library.Utils.defaultDateFormatter;
-
-public class JournalRecord extends BaseObject {
+public class Journal extends BaseObject {
 
     private Client client;
     private Book book;
@@ -14,27 +13,39 @@ public class JournalRecord extends BaseObject {
     private LocalDate endDate;
     private LocalDate returnDate;
 
-    public JournalRecord withClient(Client client) {
+    private int clientId;
+    private int bookId;
+
+    public static Journal random() {
+        return new Journal()
+                .withClient(Client.random())
+                .withBook(Book.random())
+                .withStartDate(LocalDate.now())
+                .withEndDate(LocalDate.now().plusDays(60))
+                .withReturnDate(null);
+    }
+
+    public Journal withClient(Client client) {
         this.client = client;
         return this;
     }
 
-    public JournalRecord withBook(Book book) {
+    public Journal withBook(Book book) {
         this.book = book;
         return this;
     }
 
-    public JournalRecord withStartDate(LocalDate startDate) {
+    public Journal withStartDate(LocalDate startDate) {
         this.startDate = startDate;
         return this;
     }
 
-    public JournalRecord withEndDate(LocalDate endDate) {
+    public Journal withEndDate(LocalDate endDate) {
         this.endDate = endDate;
         return this;
     }
 
-    public JournalRecord withReturnDate(LocalDate returnDate) {
+    public Journal withReturnDate(LocalDate returnDate) {
         this.returnDate = returnDate;
         return this;
     }
@@ -64,9 +75,17 @@ public class JournalRecord extends BaseObject {
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("book_id", this.getBook().getId());
         parameters.put("client_id", this.getClient().getId());
-        parameters.put("date_start", this.getStartDate());
-        parameters.put("date_end", this.getEndDate());
-        parameters.put("date_return", this.getReturnDate());
+        parameters.put("date_start", Date.valueOf(this.getStartDate()));
+        parameters.put("date_end", Date.valueOf(this.getEndDate()));
+        parameters.put("date_return", this.getReturnDate() == null ? null : Date.valueOf(this.getReturnDate()));
         return parameters;
+    }
+
+    public int getClientId() {
+        return this.getClient() == null ? clientId : this.getClient().getId();
+    }
+
+    public int getBookId() {
+        return this.getBook() == null ? bookId : this.getBook().getId();
     }
 }

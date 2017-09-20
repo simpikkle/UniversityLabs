@@ -1,6 +1,10 @@
 package com.library;
 
+import com.library.database.BookDao;
+import com.library.database.ClientDao;
 import com.library.database.DbConnection;
+import com.library.database.JournalDao;
+import com.library.domain.Journal;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -12,12 +16,6 @@ import java.util.Properties;
 
 public class Utils {
     private static final Logger logger = LogManager.getLogger();
-
-    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.BASIC_ISO_DATE;
-
-    public static DateTimeFormatter defaultDateFormatter() {
-        return DATE_FORMATTER;
-    }
 
     public static Properties loadProperties() {
         Properties properties = new Properties();

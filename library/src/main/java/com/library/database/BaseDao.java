@@ -27,7 +27,11 @@ public abstract class BaseDao<T extends BaseObject> implements Dao<T> {
     private void update(T object) {
         try (Connection connection = DbConnection.getConnection()) {
             Query query = connection.createQuery(getUpdateQuery());
-            object.getParameterMapping().forEach(query::addParameter);
+            object.getParameterMapping().forEach((name, value) -> {
+                if (value != null) {
+                    query.addParameter(name, value);
+                }
+            });
             query.addParameter("id", object.getId());
             query.executeUpdate();
         } catch (Exception e) {
@@ -98,7 +102,7 @@ public abstract class BaseDao<T extends BaseObject> implements Dao<T> {
         }
     }
 
-    private boolean alreadyExists(BaseObject object) {
+    protected boolean alreadyExists(BaseObject object) {
         return object.getId() != null && getById(object.getId()) != null;
     }
 
