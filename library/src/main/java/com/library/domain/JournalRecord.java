@@ -1,8 +1,12 @@
 package com.library.domain;
 
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 
-public class JournalRecord {
+import static com.library.Utils.defaultDateFormatter;
+
+public class JournalRecord extends BaseObject {
 
     private Client client;
     private Book book;
@@ -53,5 +57,16 @@ public class JournalRecord {
 
     public LocalDate getReturnDate() {
         return returnDate;
+    }
+
+    @Override
+    public Map<String, String> getParameterMapping() {
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("book_id", String.valueOf(this.getBook().getId()));
+        parameters.put("client_id", String.valueOf(this.getClient().getId()));
+        parameters.put("date_start", this.getStartDate().format(defaultDateFormatter()));
+        parameters.put("date_end", this.getEndDate().format(defaultDateFormatter()));
+        parameters.put("date_return", this.getReturnDate().format(defaultDateFormatter()));
+        return parameters;
     }
 }

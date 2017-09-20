@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
-    private static final String LOGIN_WINDOW = "login.fxml";
+    private static final String LOGIN_WINDOW = "windows/login.fxml";
 
     @Override
     public void start(Stage primaryStage) throws Exception{

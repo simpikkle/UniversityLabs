@@ -8,7 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
-public class LoginController {
+public class LoginController extends BaseController {
 
     @FXML
     protected Label exceptionLabel;
@@ -25,7 +25,7 @@ public class LoginController {
     public void runAuthentication() {
         try {
             new Authentication().runAuthentication(usernameInput.getText(), passwordInput.getText());
-            // TODO open main window
+            createNextStage(MAIN_WINDOW, "Main Window", loginButton);
         } catch (DatabaseException | AuthenticationException e) {
             exceptionLabel.setText(e.getMessage());
             exceptionLabel.setVisible(true);

@@ -33,7 +33,7 @@ public class AuthenticationTest {
 
     @Test
     public void shouldPassWithValidUser() throws DatabaseException, AuthenticationException {
-        when(userDao.getPasswordByUser(eq(USERNAME))).thenReturn(PASSWORD);
+        when(userDao.getPasswordByUser(eq(USERNAME))).thenReturn(Hash.hash(PASSWORD));
         assertThatCode(() -> authentication.runAuthentication(USERNAME, PASSWORD))
                 .doesNotThrowAnyException();
     }

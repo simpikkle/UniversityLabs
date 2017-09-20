@@ -1,9 +1,22 @@
 package com.library.domain;
 
-public class Client {
+import org.apache.commons.lang3.RandomStringUtils;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class Client extends BaseObject {
+
     private String firstName;
     private String lastName;
     private String passportNumber;
+
+    public static Client random() {
+        return new Client()
+                .withFirstName(RandomStringUtils.randomAlphabetic(10))
+                .withLastName(RandomStringUtils.randomAlphabetic(10))
+                .withPassportNumber(RandomStringUtils.randomAlphabetic(10));
+    }
 
     public Client withFirstName(String firstName) {
         this.firstName = firstName;
@@ -30,5 +43,14 @@ public class Client {
 
     public String getPassportNumber() {
         return passportNumber;
+    }
+
+    @Override
+    public Map<String, String> getParameterMapping() {
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("first_name", this.getFirstName());
+        parameters.put("last_name", this.getLastName());
+        parameters.put("passport", this.getPassportNumber());
+        return parameters;
     }
 }
