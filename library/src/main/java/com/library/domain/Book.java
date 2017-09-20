@@ -1,5 +1,7 @@
 package com.library.domain;
 
+import org.apache.commons.lang3.RandomStringUtils;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,6 +10,13 @@ public class Book extends BaseObject {
     private String bookName;
     private Integer amount;
     private BookType bookType;
+
+    public static Book random() {
+        return new Book()
+                .withBookName(RandomStringUtils.randomAlphabetic(10))
+                .withAmount(10)
+                .withBookType(BookType.USUAL);
+    }
 
     public Book withBookName(String bookName) {
         this.bookName = bookName;
@@ -37,11 +46,11 @@ public class Book extends BaseObject {
     }
 
     @Override
-    public Map<String, String> getParameterMapping() {
-        Map<String, String> parameters = new HashMap<>();
+    public Map<String, Object> getParameterMapping() {
+        Map<String, Object> parameters = new HashMap<>();
         parameters.put("name", this.getBookName());
-        parameters.put("amount", String.valueOf(this.getAmount()));
-        parameters.put("book_type_id", String.valueOf(this.getBookType().ordinal()));
+        parameters.put("amount", this.getAmount());
+        parameters.put("book_type_id", this.getBookType().ordinal()+1);
         return parameters;
     }
 }

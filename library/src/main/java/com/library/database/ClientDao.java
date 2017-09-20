@@ -8,13 +8,14 @@ import java.util.Map;
 public class ClientDao extends BaseDao<Client> {
 
     @Override
-    protected String getUpdateQuery() {
-        return "update client set first_name= :first_name, last_name= :last_name, passport= :passport where id=:id;";
+    protected String getInsertQuery() {
+        return "insert into client (first_name, last_name, passport) " +
+                "values (:first_name, :last_name, :passport);";
     }
 
     @Override
-    protected Class getThisClass() {
-        return Client.class;
+    protected String getUpdateQuery() {
+        return "update client set first_name= :first_name, last_name= :last_name, passport= :passport where id=:id;";
     }
 
     @Override
@@ -38,17 +39,16 @@ public class ClientDao extends BaseDao<Client> {
     }
 
     @Override
-    protected String getInsertQuery() {
-        return "insert into client (first_name, last_name, passport) " +
-                "values (:first_name, :last_name, :passport);";
-    }
-
-    @Override
     protected Map<String, String> getMapping() {
         Map<String, String> columns = new HashMap<>();
         columns.put("first_name", "firstName");
         columns.put("last_name", "lastName");
         columns.put("passport", "passportNumber");
         return columns;
+    }
+
+    @Override
+    protected Class getThisClass() {
+        return Client.class;
     }
 }

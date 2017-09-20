@@ -46,8 +46,8 @@ public class Client extends BaseObject {
     }
 
     @Override
-    public Map<String, String> getParameterMapping() {
-        Map<String, String> parameters = new HashMap<>();
+    public Map<String, Object> getParameterMapping() {
+        Map<String, Object> parameters = new HashMap<>();
         parameters.put("first_name", this.getFirstName());
         parameters.put("last_name", this.getLastName());
         parameters.put("passport", this.getPassportNumber());

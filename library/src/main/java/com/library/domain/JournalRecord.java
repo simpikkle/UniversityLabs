@@ -60,13 +60,13 @@ public class JournalRecord extends BaseObject {
     }
 
     @Override
-    public Map<String, String> getParameterMapping() {
-        Map<String, String> parameters = new HashMap<>();
-        parameters.put("book_id", String.valueOf(this.getBook().getId()));
-        parameters.put("client_id", String.valueOf(this.getClient().getId()));
-        parameters.put("date_start", this.getStartDate().format(defaultDateFormatter()));
-        parameters.put("date_end", this.getEndDate().format(defaultDateFormatter()));
-        parameters.put("date_return", this.getReturnDate().format(defaultDateFormatter()));
+    public Map<String, Object> getParameterMapping() {
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("book_id", this.getBook().getId());
+        parameters.put("client_id", this.getClient().getId());
+        parameters.put("date_start", this.getStartDate());
+        parameters.put("date_end", this.getEndDate());
+        parameters.put("date_return", this.getReturnDate());
         return parameters;
     }
 }

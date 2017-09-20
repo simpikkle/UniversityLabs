@@ -14,5 +14,5 @@ public abstract class BaseObject {
         this.id = id;
     }
 
-    public abstract Map<String, String> getParameterMapping();
+    public abstract Map<String, Object> getParameterMapping();
 }
