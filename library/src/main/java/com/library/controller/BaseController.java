@@ -1,6 +1,7 @@
 package com.library.controller;
 
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Control;
@@ -15,8 +16,9 @@ public class BaseController {
     private static final Logger logger = LogManager.getLogger(BaseController.class);
 
     protected static final String MAIN_WINDOW = "windows/main.fxml";
+    protected static final String CRUD_WINDOW = "windows/crud.fxml";
 
-    void createNextStage(String fxmlPath, String title, Control relatedObject) {
+    void createNextStage(String fxmlPath, String title, Node relatedObject) {
         try {
             Stage stage = (Stage) relatedObject.getScene().getWindow();
             stage.close();
