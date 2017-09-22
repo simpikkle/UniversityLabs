@@ -50,6 +50,9 @@ public class JournalDaoTest {
         journalDao.saveOrUpdateAll(journalsToSave);
         List<Journal> journalsFromDb = journalDao.getAll();
         assertThat(journalsFromDb).hasSameSizeAs(journalsToSave);
+        journalsFromDb.forEach(journal -> {
+            assertThat(journal.getClient()).isNotNull();
+        });
         journalDao.deleteAll();
     }
 

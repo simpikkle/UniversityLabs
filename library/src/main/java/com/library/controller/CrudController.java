@@ -7,6 +7,8 @@ import com.library.domain.Book;
 import com.library.domain.BookType;
 import com.library.domain.Client;
 import com.library.domain.Journal;
+import javafx.beans.binding.Bindings;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -100,9 +102,22 @@ public class CrudController extends BaseController implements Initializable {
         List<Journal> journals = journalDao.getAll();
 
         TableColumn bookColumn = new TableColumn("Book");
-        bookColumn.cellValueFactoryProperty().setValue(new PropertyValueFactory<Book, String>("book"));
+
+        bookColumn.setCellValueFactory(cellDataFeatures -> {
+            TableColumn.CellDataFeatures value = (TableColumn.CellDataFeatures)cellDataFeatures;
+            Journal journal = (Journal) value.getValue();
+            return Bindings.createStringBinding(() -> journal.getBook().getBookName());
+        });
+
         TableColumn clientColumn = new TableColumn("Client");
-        clientColumn.cellValueFactoryProperty().setValue(new PropertyValueFactory<Book, String>("client"));
+
+        clientColumn.setCellValueFactory(cellDataFeatures -> {
+            TableColumn.CellDataFeatures value = (TableColumn.CellDataFeatures)cellDataFeatures;
+            Journal journal = (Journal) value.getValue();
+            return Bindings.createStringBinding(() -> journal.getClient().getFirstName()
+                    + " " + journal.getClient().getLastName());
+        });
+
         TableColumn startDateColumn = new TableColumn("Start date");
         startDateColumn.cellValueFactoryProperty().setValue(new PropertyValueFactory<Book, Date>("startDate"));
         TableColumn endDateColumn = new TableColumn("End date");

@@ -3,7 +3,9 @@ package com.library.database;
 import com.library.domain.Client;
 import com.library.domain.Journal;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class JournalDao extends BaseDao<Journal> {
@@ -20,13 +22,24 @@ public class JournalDao extends BaseDao<Journal> {
     @Override
     public Journal getById(int id) {
         Journal journal = super.getById(id);
+        fillClientAndBook(journal);
+        return journal;
+    }
+
+    @Override
+    public List<Journal> getAll() {
+        List<Journal> list = super.getAll();
+        list.forEach(this::fillClientAndBook);
+        return list;
+    }
+
+    private void fillClientAndBook(Journal journal) {
         if (journal.getClient() == null || journal.getClient().getId().equals(journal.getClientId())) {
             journal.withClient(new ClientDao().getById(journal.getClientId()));
         }
         if (journal.getBook() == null || journal.getBook().getId().equals(journal.getBookId())) {
             journal.withBook(new BookDao().getById(journal.getBookId()));
         }
-        return journal;
     }
 
     @Override
