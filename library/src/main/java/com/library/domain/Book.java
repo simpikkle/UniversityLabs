@@ -50,7 +50,7 @@ public class Book extends BaseObject {
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("name", this.getBookName());
         parameters.put("amount", this.getAmount());
-        parameters.put("book_type_id", this.getBookType().ordinal()+1);
+        parameters.put("book_type_id", this.getBookType().ordinal());
         return parameters;
     }
 }

@@ -1,6 +1,7 @@
 package com.library.domain;
 
 public enum BookType {
+    DOP(0,0),
     USUAL(60, 10),
     RARE(21, 30),
     UNIQUE(7, 50)
