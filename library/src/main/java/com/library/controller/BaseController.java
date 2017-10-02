@@ -19,6 +19,7 @@ public class BaseController {
 
     protected static final String MAIN_WINDOW = "windows/main.fxml";
     protected static final String CRUD_WINDOW = "windows/crud.fxml";
+    protected static final String ADD_EDIT_WINDOW = "windows/add-edit.fxml";
 
     void createNextStage(String fxmlPath, String title, Node relatedObject) {
         createNextStage(fxmlPath, title, (Stage) relatedObject.getScene().getWindow());
@@ -33,7 +34,8 @@ public class BaseController {
             stage.setScene(new Scene(root));
             stage.setResizable(false);
             stage.show();
-            if (fxmlPath.equals(CRUD_WINDOW)) {
+            if (fxmlPath.equals(CRUD_WINDOW) || fxmlPath.equals(ADD_EDIT_WINDOW)) {
+                CrudController.setAction(null);
                 stage.setOnCloseRequest(event -> createNextStage(MAIN_WINDOW, "Main", new Stage()));
             }
         } catch (IOException e) {

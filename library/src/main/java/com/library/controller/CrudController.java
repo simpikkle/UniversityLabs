@@ -8,7 +8,6 @@ import com.library.domain.BookType;
 import com.library.domain.Client;
 import com.library.domain.Journal;
 import javafx.beans.binding.Bindings;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,7 +16,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.Stage;
 
 import java.net.URL;
 import java.sql.Date;
@@ -26,7 +24,9 @@ import java.util.ResourceBundle;
 
 public class CrudController extends BaseController implements Initializable {
 
-    private static State state;
+    private static State subject;
+
+    private static State action;
 
     private ClientDao clientDao = new ClientDao();
     private BookDao bookDao = new BookDao();
@@ -47,21 +47,39 @@ public class CrudController extends BaseController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        tableView.setEditable(true);
-
-        switch (state) {
-            case BOOK:
-                fillBooks();
-                break;
-            case CLIENT:
-                fillClients();
-                break;
-            case JOURNAL:
-                fillJournal();
-                break;
-            default:
-                throw new IllegalStateException("State is not defined!");
+        if (tableView != null) {
+            tableView.setEditable(true);
         }
+
+        if (action == null) {
+            switch (subject) {
+                case BOOK:
+                    fillBooks();
+                    break;
+                case CLIENT:
+                    fillClients();
+                    break;
+                case JOURNAL:
+                    fillJournal();
+                    break;
+                default:
+                    throw new IllegalStateException("State is not defined!");
+            }
+        }
+    }
+
+    public void openAddingDialog(ActionEvent actionEvent) {
+        setAction(State.ADD);
+        createNextStage(ADD_EDIT_WINDOW, action + " " + subject, addNewButton);
+    }
+
+    public void openEditingDialog(ActionEvent actionEvent) {
+        setAction(State.EDIT);
+        createNextStage(ADD_EDIT_WINDOW, action + " " + subject, addNewButton);
+    }
+
+    public void deleteItem(ActionEvent actionEvent) {
+
     }
 
     private void fillBooks() {
@@ -132,11 +150,19 @@ public class CrudController extends BaseController implements Initializable {
         tableView.setItems(FXCollections.observableArrayList(journals));
     }
 
-    public static State getState() {
-        return state;
+    public static State getSubject() {
+        return subject;
     }
 
-    public static void setState(State stateToSet) {
-        state = stateToSet;
+    public static void setSubject(State stateToSet) {
+        subject = stateToSet;
+    }
+
+    public static State getAction() {
+        return action;
+    }
+
+    public static void setAction(State action) {
+        CrudController.action = action;
     }
 }
