@@ -9,83 +9,93 @@ import static java.util.Arrays.stream;
 
 public class Criterion {
 
-    private List<List<Integer>> matrixList;
     private int numberOfRows;
     private int numberOfColumns;
     private Integer[][] matrix;
 
-    public Criterion(List<List<Integer>> matrixList) {
-        this.matrixList = matrixList;
-        fillMatrix();
-    }
-
-    private void fillMatrix() {
-        numberOfRows = matrixList.size();
-        numberOfColumns = matrixList.get(0).size();
-        matrix = new Integer[numberOfRows][numberOfColumns];
-        int i = 0;
-        for (List<Integer> row : matrixList) {
-            for (int j = 0; j < numberOfColumns; j++) {
-                matrix[i][j] = row.get(j);
-            }
-            i++;
-        }
-        Logger.log("Initial matrix: \n");
-        Logger.log(matrix);
+    public Criterion(Integer[][] matrix) {
+        this.matrix = matrix;
+        this.numberOfRows = matrix.length;
+        this.numberOfColumns = matrix[0].length;
     }
 
     public Integer minMax() {
-        Logger.log("\nMinMax criterion");
         Integer[] columnMin = new Integer[numberOfColumns];
-        Logger.log("\nColumns' minimums: \n");
+        Logger.log("\nИсходная матрица: \n");
+        Logger.log(matrix);
+        Logger.log("Минимумы по столбцам: \n");
+        Integer[] rowWithMinColumn = new Integer[numberOfColumns];
+        int k = 0;
         for (int j = 0; j < numberOfColumns; j++) {
             columnMin[j] = matrix[0][j];
             for (int i = 0; i < numberOfRows; i++) {
                 if (matrix[i][j] < columnMin[j]) {
                     columnMin[j] = matrix[i][j];
+                    rowWithMinColumn[k++] = i+1;
                 }
             }
             Logger.log("\t" + columnMin[j]);
         }
-        Integer result = stream(columnMin).max(Comparator.naturalOrder()).get();
-        Logger.log("\nMinMax criterion result (max of min) is " + result);
-        return result;
+        Integer maxRow = columnMin[0];
+        int rowIndex = 0;
+        for (int i = 0; i < numberOfColumns; i++) {
+            if (columnMin[i] > maxRow) {
+                maxRow = columnMin[i];
+                rowIndex = rowWithMinColumn[i];
+            }
+        }
+        Logger.log("\nРезультат минимаксного критерия (максимальный минимум по столбцам): " + maxRow);
+        Logger.log("\nСледует выбрать стратегию " + rowIndex);
+        return rowIndex;
     }
 
     public Integer savage() {
-
-        Logger.log("\nSavage criterion");
+        Logger.log("\nИсходная матрица: \n");
+        Logger.log(matrix);
         Integer[] columnMax = new Integer[numberOfColumns];
         Integer[][] riskMatrix = new Integer[numberOfRows][numberOfColumns];
-        Logger.log("\nColumns' maximum: \n");
+        Logger.log("Максимумы по столбцам: \n");
         for (int j = 0; j < numberOfColumns; j++) {
             columnMax[j] = matrix[0][j];
-            // Find max in column
             for (int i = 0; i < numberOfRows; i++) {
                 if (matrix[i][j] > columnMax[j]) {
                     columnMax[j] = matrix[i][j];
                 }
             }
             Logger.log("\t" + columnMax[j]);
-            // Fill risk matrix
+
             for (int i = 0; i < numberOfRows; i++) {
                 riskMatrix[i][j] = columnMax[j] - matrix[i][j];
             }
         }
+        Logger.log("\nМатрица рисков: \n");
+        Logger.log(riskMatrix);
         Integer[] maxRiskPerRow = new Integer[numberOfRows];
+        Logger.log("Масимальный рик по строкам: \n");
         for (int i = 0; i < numberOfRows; i++) {
             maxRiskPerRow[i] = stream(riskMatrix[i]).max(Comparator.naturalOrder()).get();
-            Logger.log("\n Max risk per row: " + maxRiskPerRow[i]);
+            Logger.log(maxRiskPerRow[i] + "\n");
         }
 
-        Integer result = stream(maxRiskPerRow).min(Comparator.naturalOrder()).get();
-        Logger.log("\nSavage criterion result is " + result);
-        return result;
+        Integer minRisk = maxRiskPerRow[0];
+        int rowIndex = 0;
+        for (int i = 0; i < numberOfRows; i++) {
+            if (maxRiskPerRow[i] < minRisk) {
+                minRisk = maxRiskPerRow[i];
+                rowIndex = i+1;
+            }
+        }
+        Logger.log("Результат критерия Сэвиджа (минимальный риск из максимальных по строкам): " + minRisk);
+        Logger.log("\nСледует выбрать стратегию " + rowIndex);
+        return rowIndex;
     }
 
-    public Float hurwicz() {
-        Logger.log("\nHurwicz criterion");
+    public Integer hurwicz() {
+        Logger.log("\nИсходная матрица: \n");
+        Logger.log(matrix);
         float c = 0.25f;
+        Logger.log("Коэффициент C = " + c + " \n");
+        Logger.log("Результат по строкам: \n");
         Float[] resultPerRow = new Float[numberOfRows];
         for (int i = 0; i < numberOfRows; i++) {
             int min = matrix[i][0];
@@ -97,16 +107,26 @@ public class Criterion {
                 if (matrix[i][j] < min) {
                     min = matrix[i][j];
                 }
-                resultPerRow[i] = c * min + (1 - c) * max;
+            }
+            resultPerRow[i] = c * min + (1 - c) * max;
+            Logger.log("Min = " + min + ", max = " + max + ", C*MIN + (1-C)*MAX = " + resultPerRow[i] + "\n");
+        }
+        Float maxRow = resultPerRow[0];
+        int rowIndex = 0;
+        for (int i = 0; i < numberOfRows; i++) {
+            if (resultPerRow[i] > maxRow) {
+                maxRow = resultPerRow[i];
+                rowIndex = i+1;
             }
         }
-        Float result = stream(resultPerRow).max(Comparator.naturalOrder()).get();
-        Logger.log("\nHurwicz criterion result is " + result);
-        return result;
+        Logger.log("\nРезультат критерия Гурвица (максимальный по строкам): " + maxRow);
+        Logger.log("\nСледует выбрать стратегию " + rowIndex);
+        return rowIndex;
     }
 
-    public float bl(float[] probabilities, float[] amount) {
-        Logger.log("\nB-L criterion");
+    public float bayes(Integer[] amount, Float[] probabilities) {
+        Logger.log("\nИсходная матрица: \n");
+        Logger.log(matrix);
         Float[] rowSum = new Float[numberOfRows];
         for (int i = 0; i < numberOfRows; i++) {
             rowSum[i] = 0f;
@@ -122,9 +142,8 @@ public class Criterion {
                 maxRowIndex = i;
             }
         }
-        Float result = stream(rowSum).max(Comparator.naturalOrder()).get();
-        Logger.log("\nB-L result is " + result);
-        Logger.log("\nAmount to order is " + amount[maxRowIndex]);
-        return result;
+        Logger.log("\nРезультат критерия Байеса-Лапласа: " + maxSum);
+        Logger.log("\nСледует выбрать стратегию " + amount[maxRowIndex]);
+        return amount[maxRowIndex];
     }
 }

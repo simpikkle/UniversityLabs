@@ -2,29 +2,51 @@ package com.test;
 
 import com.test.utils.Logger;
 
-import java.util.List;
-
-import static com.test.utils.Reader.readMatrix;
+import static com.test.utils.Reader.readRowAsFloatArray;
+import static com.test.utils.Reader.readRowAsIntegerArray;
+import static com.test.utils.Reader.readMatrixAsIntegerArray;
+import static java.util.Arrays.stream;
 
 public class Tester {
 
     private final static String RESOURCE_PATH = "src/main/resources/";
 
     public static void testCriteria() {
-        List<List<Integer>> matrix = readMatrix(RESOURCE_PATH + "matrix.txt");
+        Integer[][] matrix = readMatrixAsIntegerArray(RESOURCE_PATH + "matrix.txt");
         Criterion criterion = new Criterion(matrix);
-        Logger.log("\n************");
+        Logger.log("\nМинимаксный критерий");
         criterion.minMax();
-        Logger.log("\n************");
+        Logger.log("\n\n\n");
+        Logger.log("\nКритерий Сэвиджа");
         criterion.savage();
-        Logger.log("\n************");
+        Logger.log("\n\n\n");
+        Logger.log("\nКритерий Гурвица");
         criterion.hurwicz();
+        Logger.log("\n\n\n");
     }
 
-    public static void testBL() {
-        List<List<Integer>> matrix = readMatrix(RESOURCE_PATH + "mersedes.txt");
-        Criterion criterion = new Criterion(matrix);
-        criterion.bl(new float[]{0.2f, 0.15f, 0.25f, 0.2f, 0.2f},
-                new float[]{100, 150, 200, 250, 300});
+    public static void testBayes() {
+        String fileName = RESOURCE_PATH + "amountsAndPossibilities.txt";
+        Integer[] amount = readRowAsIntegerArray(fileName, 0);
+        Float[] possibilities = readRowAsFloatArray(fileName, 1);
+        Integer startPrice = 49000;
+        Integer endPrice = 15000;
+        Integer selfPrice = 25000;
+        Integer[][] priceMatrix = new Integer[amount.length][amount.length];
+        for (int i = 0; i < amount.length; i++) {
+            int order = amount[i];
+            for (int j = 0; j < amount.length; j++) {
+                int sold = amount[j];
+                if (sold <= order) {
+                    priceMatrix[i][j] = sold * startPrice;
+                    priceMatrix[i][j] += (order - sold) * endPrice;
+                } else {
+                    priceMatrix[i][j] = order * startPrice;
+                }
+                priceMatrix[i][j] -= order * selfPrice;
+            }
+        }
+        Criterion criterion = new Criterion(priceMatrix);
+        criterion.bayes(amount, possibilities);
     }
 }
