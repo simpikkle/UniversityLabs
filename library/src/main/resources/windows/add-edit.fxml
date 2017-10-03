@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.collections.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
-
 <?import javafx.collections.FXCollections?>
-<AnchorPane prefHeight="312.0" prefWidth="244.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.library.controller.AddController">
+
+<AnchorPane prefHeight="333.0" prefWidth="244.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.library.controller.AddEditController">
    <children>
-      <Group fx:id="bookGroup">
+      <Group fx:id="bookGroup" visible="false">
          <children>
             <TextField fx:id="bookAmountText" layoutX="35.0" layoutY="122.0" />
             <Label layoutX="34.0" layoutY="28.0" text="Book name" />
@@ -31,6 +31,17 @@
             </ComboBox>
          </children>
       </Group>
-      <Button fx:id="saveButton" onAction="#saveItem" layoutX="94.0" layoutY="243.0" mnemonicParsing="false" text="Save" />
+      <Button fx:id="saveButton" layoutX="94.0" layoutY="243.0" mnemonicParsing="false" onAction="#saveItem" text="Save" />
+      <Label fx:id="savedLabel" layoutX="34.0" layoutY="288.0" style="-fx-background-color: #c5ffb2;" text="Saved successfully!" wrapText="true" />
+      <Group fx:id="clientGroup" visible="false">
+         <children>
+            <TextField fx:id="clientPassport" layoutX="39.0" layoutY="188.0" />
+            <TextField fx:id="clientLastName" layoutX="39.0" layoutY="64.0" />
+            <Label layoutX="39.0" layoutY="158.0" text="Passport" />
+            <TextField fx:id="clientFirstName" layoutX="39.0" layoutY="122.0" />
+            <Label layoutX="43.0" layoutY="41.0" text="Last Name" />
+            <Label layoutX="43.0" layoutY="98.0" text="First Name" />
+         </children>
+      </Group>
    </children>
 </AnchorPane>

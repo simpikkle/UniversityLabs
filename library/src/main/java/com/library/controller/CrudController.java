@@ -3,10 +3,7 @@ package com.library.controller;
 import com.library.database.BookDao;
 import com.library.database.ClientDao;
 import com.library.database.JournalDao;
-import com.library.domain.Book;
-import com.library.domain.BookType;
-import com.library.domain.Client;
-import com.library.domain.Journal;
+import com.library.domain.*;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -22,6 +19,7 @@ import java.sql.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
+@SuppressWarnings("unchecked")
 public class CrudController extends BaseController implements Initializable {
 
     private static State subject;
@@ -75,14 +73,31 @@ public class CrudController extends BaseController implements Initializable {
 
     public void openEditingDialog(ActionEvent actionEvent) {
         setAction(State.EDIT);
+        BaseObject baseObject = (BaseObject) tableView.getSelectionModel().getSelectedItem();
+        AddEditController.setItemId(baseObject.getId());
         createNextStage(ADD_EDIT_WINDOW, action + " " + subject, addNewButton);
     }
 
     public void deleteItem(ActionEvent actionEvent) {
-
+        BaseObject baseObject = (BaseObject) tableView.getSelectionModel().getSelectedItem();
+        switch (getSubject()) {
+            case BOOK:
+                bookDao.deleteById(baseObject.getId());
+                fillBooks();
+                break;
+            case CLIENT:
+                clientDao.deleteById(baseObject.getId());
+                fillClients();
+                break;
+            case JOURNAL:
+                journalDao.deleteById(baseObject.getId());
+                fillJournal();
+                break;
+        }
     }
 
     private void fillBooks() {
+        tableView.setItems(null);
         List<Book> books = bookDao.getAll();
 
         TableColumn bookNameColumn = new TableColumn("Name");
@@ -100,6 +115,7 @@ public class CrudController extends BaseController implements Initializable {
     }
 
     private void fillClients() {
+        tableView.setItems(null);
         List<Client> clients = clientDao.getAll();
 
         TableColumn firstNameColumn = new TableColumn("First Name");
@@ -117,6 +133,7 @@ public class CrudController extends BaseController implements Initializable {
     }
 
     private void fillJournal() {
+        tableView.setItems(null);
         List<Journal> journals = journalDao.getAll();
 
         TableColumn bookColumn = new TableColumn("Book");
