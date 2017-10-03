@@ -28,21 +28,21 @@ public class CrudController extends BaseController implements Initializable {
 
     private static State action;
 
-    private ClientDao clientDao = new ClientDao();
-    private BookDao bookDao = new BookDao();
-    private JournalDao journalDao = new JournalDao();
+    protected ClientDao clientDao = new ClientDao();
+    protected BookDao bookDao = new BookDao();
+    protected JournalDao journalDao = new JournalDao();
 
     @FXML
-    protected TableView tableView;
+    private TableView tableView;
 
     @FXML
-    protected Button addNewButton;
+    private Button addNewButton;
 
     @FXML
-    protected Button editButton;
+    private Button editButton;
 
     @FXML
-    protected Button deleteButton;
+    private Button deleteButton;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

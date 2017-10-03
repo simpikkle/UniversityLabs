@@ -1,5 +1,7 @@
 package com.library.domain;
 
+import static java.util.Arrays.stream;
+
 public enum BookType {
     DOP(0,0),
     USUAL(60, 10),
@@ -22,5 +24,10 @@ public enum BookType {
 
     public Integer getFinePerDay() {
         return finePerDay;
+    }
+
+    public static BookType getByName(String value) {
+        return stream(values()).filter(type -> type.name().equalsIgnoreCase(value))
+                .findAny().get();
     }
 }

@@ -6,9 +6,31 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.library.controller.CrudController"
-            prefHeight="400.0" prefWidth="600.0">
 
+<?import javafx.collections.FXCollections?>
+<AnchorPane prefHeight="312.0" prefWidth="244.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.library.controller.AddController">
+   <children>
+      <Group fx:id="bookGroup">
+         <children>
+            <TextField fx:id="bookAmountText" layoutX="35.0" layoutY="122.0" />
+            <Label layoutX="34.0" layoutY="28.0" text="Book name" />
+            <Label layoutX="35.0" layoutY="96.0" text="Amount of books" />
+            <TextField fx:id="bookNameText" layoutX="35.0" layoutY="57.0" />
+            <Label layoutX="35.0" layoutY="163.0" text="Book Type" />
+            <ComboBox fx:id="bookTypePicker" layoutX="35.0" layoutY="187.0" prefHeight="27.0" prefWidth="167.0">
+               <items>
+                  <FXCollections fx:factory="observableArrayList">
+                     <String fx:value="Usual" />
+                     <String fx:value="Rare" />
+                     <String fx:value="Unique" />
+                  </FXCollections>
+               </items>
+               <value>
+                  <String fx:value="Usual" />
+               </value>
+            </ComboBox>
+         </children>
+      </Group>
+      <Button fx:id="saveButton" onAction="#saveItem" layoutX="94.0" layoutY="243.0" mnemonicParsing="false" text="Save" />
+   </children>
 </AnchorPane>
