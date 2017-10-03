@@ -3,6 +3,8 @@ package com.library.controller;
 import com.library.domain.Book;
 import com.library.domain.BookType;
 import com.library.domain.Client;
+import com.library.domain.Journal;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
@@ -12,6 +14,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
+import java.time.LocalDate;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class AddEditController extends CrudController {
@@ -44,6 +48,11 @@ public class AddEditController extends CrudController {
     @FXML
     private TextField clientPassport;
 
+    @FXML
+    private ComboBox bookPicker;
+    @FXML
+    private ComboBox clientPicker;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         if (getSubject().equals(State.BOOK)) {
@@ -56,9 +65,24 @@ public class AddEditController extends CrudController {
             if (getAction() == State.EDIT) {
                 fillClientInfo();
             }
+        } else {
+            journalGroup.setVisible(true);
+            fillComboBoxesForJournal();
+            if (getAction() == State.EDIT) {
+                fillJournalInfo();
+            }
         }
 
         savedLabel.setVisible(false);
+    }
+
+    private void fillComboBoxesForJournal() {
+        List<Book> books = bookDao.getAll();
+        List<Client> clients = clientDao.getAll();
+        bookPicker.setItems(FXCollections.observableArrayList(books));
+        bookPicker.getSelectionModel().selectFirst();
+        clientPicker.setItems(FXCollections.observableArrayList(clients));
+        clientPicker.getSelectionModel().selectFirst();
     }
 
     public void saveItem(ActionEvent actionEvent) {
@@ -69,6 +93,26 @@ public class AddEditController extends CrudController {
             case CLIENT:
                 saveClient();
                 break;
+            case JOURNAL:
+                saveJournal();
+                break;
+        }
+    }
+
+    private void saveJournal() {
+        try {
+            Client client = clientDao.getById(clientPicker.getSelectionModel().getSelectedIndex());
+            Book book = bookDao.getById(bookPicker.getSelectionModel().getSelectedIndex());
+            Journal journal = new Journal()
+                    .withClient(client)
+                    .withBook(book)
+                    .withStartDate(LocalDate.now())
+                    .withEndDate(LocalDate.now()
+                            .plusDays(book.getBookType().getDaysBeforeFine()));
+            journalDao.saveOrUpdate(journal);
+            savedLabel.setVisible(true);
+        } catch (Exception e) {
+            showError(e);
         }
     }
 
@@ -124,6 +168,12 @@ public class AddEditController extends CrudController {
         clientFirstName.setText(client.getFirstName());
         clientLastName.setText(client.getLastName());
         clientPassport.setText(client.getPassportNumber());
+    }
+
+    private void fillJournalInfo() {
+        Journal journal = journalDao.getById(itemId);
+        clientPicker.setValue(journal.getClient());
+        bookPicker.setValue(journal.getBook());
     }
 
     public static Integer getItemId() {

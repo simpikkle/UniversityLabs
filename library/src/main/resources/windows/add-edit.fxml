@@ -43,5 +43,13 @@
             <Label layoutX="43.0" layoutY="98.0" text="First Name" />
          </children>
       </Group>
+      <Group fx:id="journalGroup" visible="false">
+         <children>
+            <Label layoutX="25.0" layoutY="134.0" text="Book" />
+            <Label layoutX="23.0" layoutY="56.0" text="Client" />
+            <ComboBox fx:id="clientPicker" layoutX="25.0" layoutY="81.0" prefHeight="27.0" prefWidth="198.0" />
+            <ComboBox fx:id="bookPicker" layoutX="25.0" layoutY="167.0" prefHeight="27.0" prefWidth="198.0" />
+         </children>
+      </Group>
    </children>
 </AnchorPane>

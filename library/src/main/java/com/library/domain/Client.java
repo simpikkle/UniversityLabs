@@ -53,4 +53,9 @@ public class Client extends BaseObject {
         parameters.put("passport", this.getPassportNumber());
         return parameters;
     }
+
+    @Override
+    public String toString() {
+        return this.getFirstName() + " " + this.getLastName() + " {" + this.getPassportNumber() + "}";
+    }
 }

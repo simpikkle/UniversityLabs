@@ -53,4 +53,9 @@ public class Book extends BaseObject {
         parameters.put("book_type_id", this.getBookType().ordinal());
         return parameters;
     }
+
+    @Override
+    public String toString() {
+        return this.getBookName();
+    }
 }
