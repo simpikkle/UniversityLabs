@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.*;
 
 public class ClientDaoTest {
 
@@ -51,4 +52,16 @@ public class ClientDaoTest {
         clientDao.deleteAll();
     }
 
+    @Test
+    public void getClientByPassportNumber() {
+        clientDao.saveOrUpdate(
+                new Client().withLastName("Smith")
+                .withFirstName("Yan")
+                .withPassportNumber("000111")
+        );
+        Client client = clientDao.getByName("000111");
+        assertNotNull(client);
+        assertTrue(client.getLastName().equals("Smith"));
+        assertTrue(client.getFirstName().equals("Yan"));
+    }
 }

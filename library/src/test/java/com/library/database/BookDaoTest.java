@@ -1,6 +1,7 @@
 package com.library.database;
 
 import com.library.domain.Book;
+import com.library.domain.BookType;
 import com.library.domain.Client;
 import org.junit.Test;
 
@@ -8,6 +9,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class BookDaoTest {
 
@@ -50,6 +53,18 @@ public class BookDaoTest {
         List<Book> booksFromDb = bookDao.getAll();
         assertThat(booksFromDb).hasSameSizeAs(booksToSave);
         bookDao.deleteAll();
+    }
+
+    @Test
+    public void getBookByBookName() {
+        bookDao.saveOrUpdate(
+                new Book().withBookName("name1")
+                .withAmount(1)
+                .withBookType(BookType.USUAL)
+        );
+        Book book = bookDao.getByName("name1");
+        assertNotNull(book);
+        assertTrue(book.getBookName().equals("name1"));
     }
 
 }

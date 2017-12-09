@@ -30,6 +30,11 @@ public class BookDao extends BaseDao<Book> {
     }
 
     @Override
+    protected String getSelectByNameQuery() {
+        return "select * from book where name = :name";
+    }
+
+    @Override
     protected String getDeleteByIdQuery() {
         return "delete from book where id= :id";
     }

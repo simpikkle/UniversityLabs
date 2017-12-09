@@ -101,8 +101,10 @@ public class AddEditController extends CrudController {
 
     private void saveJournal() {
         try {
-            Client client = clientDao.getById(clientPicker.getSelectionModel().getSelectedIndex());
-            Book book = bookDao.getById(bookPicker.getSelectionModel().getSelectedIndex());
+            String passport = ((Client) clientPicker.getSelectionModel().getSelectedItem()).getPassportNumber();
+            Client client = clientDao.getByName(passport);
+            String bookName = ((Book) bookPicker.getSelectionModel().getSelectedItem()).getBookName();
+            Book book = bookDao.getByName(bookName);
             Journal journal = new Journal()
                     .withClient(client)
                     .withBook(book)

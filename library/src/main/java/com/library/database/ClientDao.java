@@ -29,6 +29,11 @@ public class ClientDao extends BaseDao<Client> {
     }
 
     @Override
+    protected String getSelectByNameQuery() {
+        return "select * from client where passport = :name";
+    }
+
+    @Override
     protected String getDeleteByIdQuery() {
         return "delete from client where id= :id";
     }

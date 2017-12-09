@@ -106,6 +106,21 @@ public abstract class BaseDao<T extends BaseObject> implements Dao<T> {
         return object.getId() != null && getById(object.getId()) != null;
     }
 
+    public T getByName(String name) {
+        if (name == null || name.isEmpty()) {
+            throw new IllegalArgumentException(name + " is empty or null");
+        }
+        try (Connection connection = DbConnection.getConnection()) {
+            Query query = connection.createQuery(getSelectByNameQuery());
+            getMapping().forEach(query::addColumnMapping);
+            query.addParameter("name", name);
+            return (T) query.executeAndFetch(getThisClass()).iterator().next();
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
+        return null;
+    }
+
     protected abstract String getInsertQuery();
 
     protected abstract String getUpdateQuery();
@@ -113,6 +128,8 @@ public abstract class BaseDao<T extends BaseObject> implements Dao<T> {
     protected abstract String getSelectAllQuery();
 
     protected abstract String getSelectByIdQuery();
+
+    protected abstract String getSelectByNameQuery();
 
     protected abstract String getDeleteByIdQuery();
 
