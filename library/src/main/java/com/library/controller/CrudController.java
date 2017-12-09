@@ -72,9 +72,13 @@ public class CrudController extends BaseController implements Initializable {
     }
 
     public void openEditingDialog(ActionEvent actionEvent) {
-        setAction(State.EDIT);
         BaseObject baseObject = (BaseObject) tableView.getSelectionModel().getSelectedItem();
-        AddEditController.setItemId(baseObject.getId());
+        if (baseObject != null) {
+            AddEditController.setItemId(baseObject.getId());
+            setAction(State.EDIT);
+        } else {
+            setAction(State.ADD);
+        }
         createNextStage(ADD_EDIT_WINDOW, action + " " + subject, addNewButton);
     }
 

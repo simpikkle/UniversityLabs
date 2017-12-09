@@ -5,13 +5,13 @@ import com.library.domain.BookType;
 import com.library.domain.Client;
 import com.library.domain.Journal;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -85,7 +85,7 @@ public class AddEditController extends CrudController {
         clientPicker.getSelectionModel().selectFirst();
     }
 
-    public void saveItem(ActionEvent actionEvent) {
+    public void saveItem(MouseEvent actionEvent) {
         switch (getSubject()) {
             case BOOK:
                 saveBook();
