@@ -26,13 +26,15 @@ public class MainController extends BaseController {
     public void openCrudForClient(MouseEvent mouseEvent) {
         CrudController.setSubject(State.CLIENT);
         createNextStage(CRUD_WINDOW, "CRUD", clientPicture);
-
     }
 
     public void openCrudForJournal(MouseEvent mouseEvent) {
         CrudController.setSubject(State.JOURNAL);
         createNextStage(CRUD_WINDOW, "CRUD", journalPicture);
+    }
 
+    public void openReports() {
+        createNextStage(REPORTS, "Reports", reportPicture);
     }
 
     public ImageView getBookPicture() {
