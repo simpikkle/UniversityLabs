@@ -1,5 +1,6 @@
 package com.library.security;
 
+import com.library.Utils;
 import com.library.database.UserDao;
 import com.library.exception.AuthenticationException;
 import com.library.exception.DatabaseException;
@@ -22,6 +23,10 @@ public class Authentication {
         String hashedPasswordFromForm = hash(passwordFromForm);
         if (!password.equals(hashedPasswordFromForm)) {
             throw new AuthenticationException();
+        } else {
+            if (username.equalsIgnoreCase("admin")) {
+                Utils.isAdmin = true;
+            }
         }
     }
 

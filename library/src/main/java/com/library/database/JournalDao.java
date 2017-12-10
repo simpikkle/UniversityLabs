@@ -2,6 +2,8 @@ package com.library.database;
 
 import com.library.domain.Journal;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,23 +22,35 @@ public class JournalDao extends BaseDao<Journal> {
     @Override
     public Journal getById(int id) {
         Journal journal = super.getById(id);
-        fillClientAndBook(journal);
+        correctFields(journal);
         return journal;
     }
 
     @Override
     public List<Journal> getAll() {
         List<Journal> list = super.getAll();
-        list.forEach(this::fillClientAndBook);
+        list.forEach(this::correctFields);
         return list;
     }
 
-    private void fillClientAndBook(Journal journal) {
+    private void correctFields(Journal journal) {
         if (journal.getClient() == null || journal.getClient().getId().equals(journal.getClientId())) {
             journal.withClient(new ClientDao().getById(journal.getClientId()));
         }
         if (journal.getBook() == null || journal.getBook().getId().equals(journal.getBookId())) {
             journal.withBook(new BookDao().getById(journal.getBookId()));
+        }
+        String startDate = ((Object)journal.getStartDate()).toString();
+        String endDate = ((Object)journal.getEndDate()).toString();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        journal.withStartDate(LocalDate.parse(startDate, formatter));
+        journal.withEndDate(LocalDate.parse(endDate, formatter));
+
+        String returnDate = journal.getReturnDate() != null ? ((Object)journal.getReturnDate()).toString() : null;
+        if (returnDate != null) {
+            journal.withReturnDate(LocalDate.parse(returnDate, formatter));
         }
     }
 

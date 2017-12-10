@@ -1,5 +1,7 @@
 package com.library.controller;
 
+import com.library.Utils;
+import com.library.database.UserDao;
 import com.library.domain.Book;
 import com.library.domain.BookType;
 import com.library.domain.Client;
@@ -7,10 +9,7 @@ import com.library.domain.Journal;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 
 import java.net.URL;
@@ -53,6 +52,9 @@ public class AddEditController extends CrudController {
     @FXML
     private ComboBox clientPicker;
 
+    @FXML
+    private DatePicker startDatePicker;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         if (getSubject().equals(State.BOOK)) {
@@ -68,6 +70,9 @@ public class AddEditController extends CrudController {
         } else {
             journalGroup.setVisible(true);
             fillComboBoxesForJournal();
+            if (Utils.isAdmin) {
+                startDatePicker.setVisible(true);
+            }
             if (getAction() == State.EDIT) {
                 fillJournalInfo();
             }
@@ -105,10 +110,11 @@ public class AddEditController extends CrudController {
             Client client = clientDao.getByName(passport);
             String bookName = ((Book) bookPicker.getSelectionModel().getSelectedItem()).getBookName();
             Book book = bookDao.getByName(bookName);
+            LocalDate date = Utils.isAdmin? startDatePicker.getValue() : LocalDate.now();
             Journal journal = new Journal()
                     .withClient(client)
                     .withBook(book)
-                    .withStartDate(LocalDate.now())
+                    .withStartDate(date)
                     .withEndDate(LocalDate.now()
                             .plusDays(book.getBookType().getDaysBeforeFine()));
             journalDao.saveOrUpdate(journal);
@@ -176,6 +182,7 @@ public class AddEditController extends CrudController {
         Journal journal = journalDao.getById(itemId);
         clientPicker.setValue(journal.getClient());
         bookPicker.setValue(journal.getBook());
+        startDatePicker.setValue(journal.getStartDate());
     }
 
     public static Integer getItemId() {
