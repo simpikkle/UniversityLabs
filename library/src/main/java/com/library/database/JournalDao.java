@@ -1,9 +1,7 @@
 package com.library.database;
 
-import com.library.domain.Client;
 import com.library.domain.Journal;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,6 +71,11 @@ public class JournalDao extends BaseDao<Journal> {
     @Override
     protected String getSelectByIdQuery() {
         return "select * from journal where id= :id";
+    }
+
+    @Override
+    protected String getSelectByNameQuery() {
+        return null;
     }
 
     @Override
