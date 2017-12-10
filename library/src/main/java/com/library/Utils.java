@@ -17,6 +17,8 @@ import java.util.Properties;
 public class Utils {
     private static final Logger logger = LogManager.getLogger();
 
+    public static boolean isAdmin;
+
     public static Properties loadProperties() {
         Properties properties = new Properties();
         try {

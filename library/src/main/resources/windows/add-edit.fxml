@@ -43,12 +43,13 @@
             <Label layoutX="43.0" layoutY="98.0" text="First Name" />
          </children>
       </Group>
-      <Group fx:id="journalGroup" visible="false">
+      <Group fx:id="journalGroup" layoutX="-1.0" layoutY="-28.0" visible="false">
          <children>
-            <Label layoutX="25.0" layoutY="134.0" text="Book" />
+            <Label layoutX="25.0" layoutY="117.0" text="Book" />
             <Label layoutX="23.0" layoutY="56.0" text="Client" />
-            <ComboBox fx:id="clientPicker" layoutX="25.0" layoutY="81.0" prefHeight="27.0" prefWidth="198.0" />
-            <ComboBox fx:id="bookPicker" layoutX="25.0" layoutY="167.0" prefHeight="27.0" prefWidth="198.0" />
+            <ComboBox fx:id="clientPicker" layoutX="24.0" layoutY="72.0" prefHeight="27.0" prefWidth="198.0" />
+            <ComboBox fx:id="bookPicker" layoutX="24.0" layoutY="134.0" prefHeight="27.0" prefWidth="198.0" />
+            <DatePicker fx:id="startDatePicker" layoutX="27.0" layoutY="186.0" prefHeight="27.0" prefWidth="197.0" promptText="Pick up start date" visible="false" />
          </children>
       </Group>
    </children>
