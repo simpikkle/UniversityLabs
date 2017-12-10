@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Control;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -12,6 +13,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
+import java.time.LocalDate;
 
 public class BaseController {
 
@@ -41,5 +43,13 @@ public class BaseController {
         } catch (IOException e) {
             logger.error(e);
         }
+    }
+
+    void showAlert(Alert.AlertType alertType, String alertTitle, String alertHeader, String alertContent) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(alertTitle);
+        alert.setHeaderText(alertHeader);
+        alert.setContentText(alertContent);
+        alert.showAndWait();
     }
 }

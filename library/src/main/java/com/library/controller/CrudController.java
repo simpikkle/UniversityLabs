@@ -9,13 +9,15 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Pane;
 
 import java.net.URL;
 import java.sql.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -42,6 +44,16 @@ public class CrudController extends BaseController implements Initializable {
     @FXML
     private Button deleteButton;
 
+    @FXML
+    private Pane returnPanel;
+
+    @FXML
+    private DatePicker returnDatePicker;
+
+    @FXML
+    private Button returnButton;
+
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -62,6 +74,33 @@ public class CrudController extends BaseController implements Initializable {
                     break;
                 default:
                     throw new IllegalStateException("State is not defined!");
+            }
+        }
+    }
+
+    public void checkSelectedItem() {
+        Journal item = (Journal) tableView.getSelectionModel().getSelectedItem();
+        if (item != null && item.getReturnDate() == null) {
+            returnPanel.setDisable(false);
+        }
+    }
+
+    public void returnBook() {
+        LocalDate date = returnDatePicker.getValue();
+        Journal journal = (Journal) tableView.getSelectionModel().getSelectedItem();
+        if(date != null && journal != null) {
+            if (isReturnDateCorrect(date, journal)) {
+                noticeIfExpired(date, journal);
+                journalDao.saveOrUpdate(journal.withReturnDate(date));
+                returnPanel.setDisable(true);
+                fillJournal();
+            } else {
+                showAlert(
+                        Alert.AlertType.ERROR,
+                        "Date picking error",
+                        "Date picking error.",
+                        "Incorrect date has been choosen. \n Select date in range between "
+                                + journal.getStartDate() + " and " + LocalDate.now());
             }
         }
     }
@@ -134,6 +173,21 @@ public class CrudController extends BaseController implements Initializable {
         tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         tableView.setItems(FXCollections.observableArrayList(clients));
+    }
+
+    private boolean isReturnDateCorrect(LocalDate date, Journal journal) {
+        return !date.isBefore(journal.getStartDate())
+                && (date.isAfter(journal.getStartDate()) && date.isBefore(LocalDate.now()) || date.isEqual(LocalDate.now()));
+    }
+
+    private void noticeIfExpired(LocalDate date, Journal journal) {
+        if (date.isEqual(journal.getEndDate()) || date.isAfter(journal.getEndDate())) {
+            showAlert(
+                    Alert.AlertType.WARNING,
+                    "Expiring notice",
+                    "Book has been returned out of end date..",
+                    "Please, notice that book has been returned to library after end date (" + journal.getEndDate() + "). It means that client have to pay fine equaled to days count after expiring.");
+        }
     }
 
     private void fillJournal() {
