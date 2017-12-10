@@ -73,7 +73,6 @@ public class Pareto implements Lab {
         flats.add(new Flat("U7", new double[]{3, 5, 4, 2, 7, 7}));
         flats.add(new Flat("U8", new double[]{3, 6, 3, 4, 4, 1}));
         flats.add(new Flat("U9", new double[]{2, 5, 3, 1, 5, 7}));
-
     }
 
     private static void initializeUniqueItems() {
@@ -130,6 +129,5 @@ public class Pareto implements Lab {
             }
             return name + tmp.toString();
         }
-
     }
 }
