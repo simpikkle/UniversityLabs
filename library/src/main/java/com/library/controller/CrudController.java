@@ -149,9 +149,9 @@ public class CrudController extends BaseController implements Initializable {
                     break;
             }
         } catch (Exception e) {
-            showAlert(Alert.AlertType.ERROR, "Can't delete client",
-                    "Client has active journal record",
-                    "Please, update journal first before deleting the client. " +
+            showAlert(Alert.AlertType.ERROR, "Can't delete item",
+                    "Item has active journal record",
+                    "Please, update journal first before deleting the item. " +
                             "Make sure he has paid all the fines.");
         }
     }
