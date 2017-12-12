@@ -110,13 +110,12 @@ public class AddEditController extends CrudController {
             Client client = clientDao.getByName(passport);
             String bookName = ((Book) bookPicker.getSelectionModel().getSelectedItem()).getBookName();
             Book book = bookDao.getByName(bookName);
-            LocalDate date = Utils.isAdmin? startDatePicker.getValue() : LocalDate.now();
+            LocalDate startDate = Utils.isAdmin? startDatePicker.getValue() : LocalDate.now();
             Journal journal = new Journal()
                     .withClient(client)
                     .withBook(book)
-                    .withStartDate(date)
-                    .withEndDate(LocalDate.now()
-                            .plusDays(book.getBookType().getDaysBeforeFine()));
+                    .withStartDate(startDate)
+                    .withEndDate(startDate.plusDays(book.getBookType().getDaysBeforeFine()));
             journalDao.saveOrUpdate(journal);
             savedLabel.setVisible(true);
         } catch (Exception e) {
@@ -125,42 +124,55 @@ public class AddEditController extends CrudController {
     }
 
     private void saveClient() {
-        try {
-            Client client = new Client()
-                    .withFirstName(clientFirstName.getText())
-                    .withLastName(clientLastName.getText())
-                    .withPassportNumber(clientPassport.getText());
-            if (itemId != null) {
-                client.setId(itemId);
+        if (clientFirstName.getText().isEmpty()
+                || clientLastName.getText().isEmpty()
+                    || clientPassport.getText().isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Empty fields",
+                    "Some fields are empty!",
+                    "Please, provide first name, last name and passport number for the client.");
+        } else {
+            try {
+                Client client = new Client()
+                        .withFirstName(clientFirstName.getText())
+                        .withLastName(clientLastName.getText())
+                        .withPassportNumber(clientPassport.getText());
+                if (itemId != null) {
+                    client.setId(itemId);
+                }
+                clientDao.saveOrUpdate(client);
+                savedLabel.setVisible(true);
+                clientFirstName.setText("");
+                clientLastName.setText("");
+                clientPassport.setText("");
+            } catch (Exception e) {
+                showError(e);
             }
-            clientDao.saveOrUpdate(client);
-            savedLabel.setVisible(true);
-            clientFirstName.setText("");
-            clientLastName.setText("");
-            clientPassport.setText("");
-        } catch (Exception e) {
-            showError(e);
         }
     }
 
     private void saveBook() {
-        // TODO add check for invalid values (empty or strings for amount)
-        // TODO check for duplicates
-        try {
-            Book book = new Book()
-                    .withBookName(bookNameText.getText())
-                    .withAmount(Integer.valueOf(bookAmountText.getText()))
-                    .withBookType(BookType.getByName((String) bookTypePicker.getValue()));
-            if (itemId != null) {
-                book.setId(itemId);
+        if (bookNameText.getText().isEmpty()
+                || bookAmountText.getText().isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Empty fields",
+                    "Some fields are empty!",
+                    "Please, provide book name and amount.");
+        } else {
+            try {
+                Book book = new Book()
+                        .withBookName(bookNameText.getText())
+                        .withAmount(Integer.valueOf(bookAmountText.getText()))
+                        .withBookType(BookType.getByName((String) bookTypePicker.getValue()));
+                if (itemId != null) {
+                    book.setId(itemId);
+                }
+                bookDao.saveOrUpdate(book);
+                savedLabel.setVisible(true);
+                bookNameText.setText("");
+                bookAmountText.setText("");
+                bookTypePicker.setValue("Usual");
+            } catch (Exception e) {
+                showError(e);
             }
-            bookDao.saveOrUpdate(book);
-            savedLabel.setVisible(true);
-            bookNameText.setText("");
-            bookAmountText.setText("");
-            bookTypePicker.setValue("Usual");
-        } catch (Exception e) {
-            showError(e);
         }
     }
 

@@ -1,5 +1,7 @@
 package com.library.domain;
 
+import com.library.Utils;
+
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -17,11 +19,13 @@ public class Journal extends BaseObject {
     private int bookId;
 
     public static Journal random() {
+        LocalDate startDate = Utils.randomDate();
+        Book book = Book.random();
         return new Journal()
                 .withClient(Client.random())
-                .withBook(Book.random())
-                .withStartDate(LocalDate.now())
-                .withEndDate(LocalDate.now().plusDays(60))
+                .withBook(book)
+                .withStartDate(startDate)
+                .withEndDate(startDate.plusDays(book.getBookType().getDaysBeforeFine()))
                 .withReturnDate(null);
     }
 

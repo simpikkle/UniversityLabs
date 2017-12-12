@@ -10,14 +10,13 @@ import java.util.List;
 public class ReportWriter {
     private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(ReportWriter.class);
 
-    //Delimiter used in CSV file
     private static final String COMA_SEPARATOR = ",";
     private static final String NEW_LINE_SEPARATOR = "\n";
 
     public static void writeReport(String fileName, List<Journal> journals, String customInfo) {
 
         FileWriter fileWriter = null;
-        String FILE_HEADER = "Дата возврата,Имя,Фамилия,Название книги";
+        String FILE_HEADER = "Start date,End date,Return date,First Name,Last name,Book";
         try {
             fileWriter = new FileWriter(fileName);
             if (customInfo != null && !customInfo.isEmpty()) fileWriter.append(customInfo).append(NEW_LINE_SEPARATOR);
@@ -25,10 +24,14 @@ public class ReportWriter {
             fileWriter.append(NEW_LINE_SEPARATOR);
 
             for (Journal journal : journals) {
+                fileWriter.append(journal.getStartDate().toString());
+                fileWriter.append(COMA_SEPARATOR);
+                fileWriter.append(journal.getEndDate().toString());
+                fileWriter.append(COMA_SEPARATOR);
                 if (journal.getReturnDate() != null) {
                     fileWriter.append(journal.getReturnDate().toString());
                 } else {
-                    fileWriter.append("Не возвращенно");
+                    fileWriter.append(" ");
                 }
                 fileWriter.append(COMA_SEPARATOR);
                 fileWriter.append(journal.getClient().getFirstName());
@@ -40,7 +43,7 @@ public class ReportWriter {
             }
             LOGGER.info("CVS has been created");
         } catch (Exception e) {
-            System.out.println("Error in CsvFileWriter !!!");
+            System.out.println("Error in CsvFileWriter");
             e.printStackTrace();
         } finally {
             try {

@@ -20,4 +20,30 @@ public class UserDao {
             throw new DatabaseException(e.getMessage(), e);
         }
     }
+
+    public boolean getIsAdmin(String username) throws DatabaseException {
+        String query = "select admin from lib_user where username = :username";
+        try(Connection connection = DbConnection.getConnection()) {
+            return connection.createQuery(query)
+                    .addParameter("username", username)
+                    .executeScalar(Boolean.class);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            throw new DatabaseException(e.getMessage(), e);
+        }
+    }
+
+    public void saveNewUserToDB(String username, String password) throws DatabaseException {
+        String query = "insert into lib_user (username, pass, admin) VALUES " +
+                "(:username, :pass, false)";
+        try(Connection connection = DbConnection.getConnection()) {
+            connection.createQuery(query)
+                    .addParameter("username", username)
+                    .addParameter("pass", password)
+                    .executeUpdate();
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            throw new DatabaseException(e.getMessage(), e);
+        }
+    }
 }

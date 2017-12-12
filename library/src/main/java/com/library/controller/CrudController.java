@@ -1,5 +1,6 @@
 package com.library.controller;
 
+import com.library.Utils;
 import com.library.database.BookDao;
 import com.library.database.ClientDao;
 import com.library.database.JournalDao;
@@ -60,6 +61,7 @@ public class CrudController extends BaseController implements Initializable {
         if (tableView != null) {
             tableView.setEditable(true);
         }
+        returnPanel.setVisible(false);
 
         if (action == null) {
             switch (subject) {
@@ -71,6 +73,10 @@ public class CrudController extends BaseController implements Initializable {
                     break;
                 case JOURNAL:
                     fillJournal();
+                    returnPanel.setVisible(true);
+                    returnButton.setVisible(true);
+                    returnButton.setDisable(false);
+                    returnDatePicker.setVisible(Utils.isAdmin);
                     break;
                 default:
                     throw new IllegalStateException("State is not defined!");
@@ -79,16 +85,20 @@ public class CrudController extends BaseController implements Initializable {
     }
 
     public void checkSelectedItem() {
-        Journal item = (Journal) tableView.getSelectionModel().getSelectedItem();
-        if (item != null && item.getReturnDate() == null) {
-            returnPanel.setDisable(false);
+        if (subject == State.JOURNAL) {
+            Journal item = (Journal) tableView.getSelectionModel().getSelectedItem();
+            if (item != null && (!Utils.isAdmin && item.getReturnDate() != null)) {
+                returnPanel.setDisable(true);
+            } else {
+                returnPanel.setDisable(false);
+            }
         }
     }
 
     public void returnBook() {
-        LocalDate date = returnDatePicker.getValue();
+        LocalDate date = returnDatePicker.getValue() == null ? LocalDate.now() : returnDatePicker.getValue();
         Journal journal = (Journal) tableView.getSelectionModel().getSelectedItem();
-        if(date != null && journal != null) {
+        if (date != null && journal != null) {
             if (isReturnDateCorrect(date, journal)) {
                 noticeIfExpired(date, journal);
                 journalDao.saveOrUpdate(journal.withReturnDate(date));
@@ -99,7 +109,7 @@ public class CrudController extends BaseController implements Initializable {
                         Alert.AlertType.ERROR,
                         "Date picking error",
                         "Date picking error.",
-                        "Incorrect date has been choosen. \n Select date in range between "
+                        "Incorrect date has been chosen. \n Select date in range between "
                                 + journal.getStartDate() + " and " + LocalDate.now());
             }
         }
@@ -122,20 +132,27 @@ public class CrudController extends BaseController implements Initializable {
     }
 
     public void deleteItem(ActionEvent actionEvent) {
-        BaseObject baseObject = (BaseObject) tableView.getSelectionModel().getSelectedItem();
-        switch (getSubject()) {
-            case BOOK:
-                bookDao.deleteById(baseObject.getId());
-                fillBooks();
-                break;
-            case CLIENT:
-                clientDao.deleteById(baseObject.getId());
-                fillClients();
-                break;
-            case JOURNAL:
-                journalDao.deleteById(baseObject.getId());
-                fillJournal();
-                break;
+        try {
+            BaseObject baseObject = (BaseObject) tableView.getSelectionModel().getSelectedItem();
+            switch (getSubject()) {
+                case BOOK:
+                    bookDao.deleteById(baseObject.getId());
+                    fillBooks();
+                    break;
+                case CLIENT:
+                    clientDao.deleteById(baseObject.getId());
+                    fillClients();
+                    break;
+                case JOURNAL:
+                    journalDao.deleteById(baseObject.getId());
+                    fillJournal();
+                    break;
+            }
+        } catch (Exception e) {
+            showAlert(Alert.AlertType.ERROR, "Can't delete client",
+                    "Client has active journal record",
+                    "Please, update journal first before deleting the client. " +
+                            "Make sure he has paid all the fines.");
         }
     }
 
@@ -197,7 +214,7 @@ public class CrudController extends BaseController implements Initializable {
         TableColumn bookColumn = new TableColumn("Book");
 
         bookColumn.setCellValueFactory(cellDataFeatures -> {
-            TableColumn.CellDataFeatures value = (TableColumn.CellDataFeatures)cellDataFeatures;
+            TableColumn.CellDataFeatures value = (TableColumn.CellDataFeatures) cellDataFeatures;
             Journal journal = (Journal) value.getValue();
             return Bindings.createStringBinding(() -> journal.getBook().getBookName());
         });
@@ -205,7 +222,7 @@ public class CrudController extends BaseController implements Initializable {
         TableColumn clientColumn = new TableColumn("Client");
 
         clientColumn.setCellValueFactory(cellDataFeatures -> {
-            TableColumn.CellDataFeatures value = (TableColumn.CellDataFeatures)cellDataFeatures;
+            TableColumn.CellDataFeatures value = (TableColumn.CellDataFeatures) cellDataFeatures;
             Journal journal = (Journal) value.getValue();
             return Bindings.createStringBinding(() -> journal.getClient().getFirstName()
                     + " " + journal.getClient().getLastName());

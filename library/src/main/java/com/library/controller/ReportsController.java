@@ -21,9 +21,9 @@ import java.util.*;
 public class ReportsController extends BaseController implements Initializable {
     private static final Logger LOGGER = LogManager.getLogger(ReportsController.class);
 
-    private static final String OUT_OF_DATE_REPORT = "outOfDateReport";
+    private static final String RETURNED_WITH_FINES = "returnedWithFines";
     private static final String NOT_RETURNED_REPORT = "notReturnedBooksReport";
-    private static final String RETURNED_IN_RANGE_REPORT = "returnedInRangeReport";
+    private static final String RANGE_REPORT = "rangeReport";
     private static final String CVS_EXT = ".csv";
 
     @FXML
@@ -54,14 +54,14 @@ public class ReportsController extends BaseController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        List<Reports> reportKinds = Arrays.asList(Reports.OUT_OF_DATE, Reports.RETURN_IN_RANGE, Reports.NOT_RETURNED);
+        List<Reports> reportKinds = Arrays.asList(Reports.RETURNED_WITH_FINES, Reports.IN_RANGE, Reports.NOT_RETURNED);
         reportPicker.setItems(FXCollections.observableArrayList(reportKinds));
     }
 
     public void showReportPanel() {
         currentReportType = (Reports) reportPicker.getSelectionModel().getSelectedItem();
         switch (currentReportType) {
-            case OUT_OF_DATE:
+            case RETURNED_WITH_FINES:
                 outOfDate.setVisible(true);
                 rangeReport.setVisible(false);
                 didntReturn.setVisible(false);
@@ -71,7 +71,7 @@ public class ReportsController extends BaseController implements Initializable {
                 outOfDate.setVisible(false);
                 rangeReport.setVisible(false);
                 break;
-            case RETURN_IN_RANGE:
+            case IN_RANGE:
                 rangeReport.setVisible(true);
                 didntReturn.setVisible(false);
                 outOfDate.setVisible(false);
@@ -93,31 +93,40 @@ public class ReportsController extends BaseController implements Initializable {
 
     public void createReport() {
         String filename;
-        switch (currentReportType) {
-            case OUT_OF_DATE:
-                filename = OUT_OF_DATE_REPORT + new Date().getTime() + CVS_EXT;
-                ReportWriter.writeReport(filename, getAllOutOfDate(), "All clients returned books after end date");
-                showAlert(Alert.AlertType.INFORMATION, "Report has been created", "Report has been successfully created", "New CSV report in file " + filename + " has been created.");
-                break;
-            case NOT_RETURNED:
-                filename = NOT_RETURNED_REPORT + new Date().getTime() + CVS_EXT;
-                if (dateFilter.isSelected()) {
-                    ReportWriter.writeReport(filename, getAllNotReturnedJournalsBeforeDate(), "All clients that didn't return their books");
-                } else {
-                    ReportWriter.writeReport(filename, getAllNotReturnedJournals(), "All clients that didn't return their books");
-                }
-                showAlert(Alert.AlertType.INFORMATION, "Report has been created", "Report has been successfully created", "New CSV report in file " + filename + " has been created.");
-                break;
-            case RETURN_IN_RANGE:
-                filename = RETURNED_IN_RANGE_REPORT + new Date().getTime() + CVS_EXT;
-                ReportWriter.writeReport(filename, getJournalInRange(), "The whole journal from " + fromDate.getValue() + " to " + toDate.getValue());
-                showAlert(Alert.AlertType.INFORMATION, "Report has been created", "Report has been successfully created", "New CSV report in file " + filename + " has been created. The whole journal from " + fromDate.getValue() + " to " + toDate.getValue());
-                break;
-            default:
-                LOGGER.info("cant pick up precisely needed type of report");
-                showAlert(Alert.AlertType.ERROR, "Report hasn't been created", "Report has not been created!", "New CSV report is unavailable to create. Report this issue to your system administrator or developers team. We are really sorry to make inconvenience staff there.");
+        if (currentReportType == null) {
+            showAlert(Alert.AlertType.ERROR,"Report type",
+                    "Report type is not selected",
+                    "Please, select type of report to generate");
+        } else {
+            switch (currentReportType) {
+                case RETURNED_WITH_FINES:
+                    filename = RETURNED_WITH_FINES + new Date().getTime() + CVS_EXT;
+                    ReportWriter.writeReport(filename, getAllOutOfDate(), "All clients who have returned books after end date and have to pay fines");
+                    showAlert(Alert.AlertType.INFORMATION, "Report has been created", "Report has been successfully created", "New CSV report in file " + filename + " has been created.");
+                    break;
+                case NOT_RETURNED:
+                    filename = NOT_RETURNED_REPORT + new Date().getTime() + CVS_EXT;
+                    if (dateFilter.isSelected()) {
+                        ReportWriter.writeReport(filename, getAllNotReturnedJournalsBeforeDate(), "All clients who haven't return books");
+                    } else {
+                        ReportWriter.writeReport(filename, getAllNotReturnedJournals(), "All clients who haven't return books");
+                    }
+                    showAlert(Alert.AlertType.INFORMATION, "Report has been created", "Report has been successfully created", "New CSV report in file " + filename + " has been created.");
+                    break;
+                case IN_RANGE:
+                    if (fromDate.getValue() == null || toDate.getValue() == null) {
+                        fromDate.setValue(LocalDate.MIN);
+                        toDate.setValue(LocalDate.now());
+                    }
+                    filename = RANGE_REPORT + new Date().getTime() + CVS_EXT;
+                    ReportWriter.writeReport(filename, getJournalInRange(), "All journal records from " + fromDate.getValue() + " to " + toDate.getValue());
+                    showAlert(Alert.AlertType.INFORMATION, "Report has been created", "Report has been successfully created", "New CSV report in file " + filename + " has been created. The whole journal from " + fromDate.getValue() + " to " + toDate.getValue());
+                    break;
+                default:
+                    LOGGER.info("Cant determine the type of the report");
+                    showAlert(Alert.AlertType.ERROR, "Report hasn't been created", "Report has not been created!", "New CSV report is unavailable to create. Report this issue to your system administrator or developers team. .");
+            }
         }
-
     }
 
     private List<Journal> getAllOutOfDate() {
@@ -156,9 +165,9 @@ public class ReportsController extends BaseController implements Initializable {
     }
 
     enum Reports {
-        OUT_OF_DATE("Books returned after end date"),
-        RETURN_IN_RANGE("Journal in range"),
-        NOT_RETURNED("Book didn't returned");
+        RETURNED_WITH_FINES("Books that have been returned after end date"),
+        IN_RANGE("Journal records in specified time range"),
+        NOT_RETURNED("Clients who haven't return their books");
 
         Reports(String value) {
             this.value = value;

@@ -24,11 +24,18 @@ public class Authentication {
         if (!password.equals(hashedPasswordFromForm)) {
             throw new AuthenticationException();
         } else {
-            if (username.equalsIgnoreCase("admin")) {
+            if (userDao.getIsAdmin(username)) {
                 Utils.isAdmin = true;
             }
         }
     }
 
 
+    public void saveNewUser(String username, String password) throws DatabaseException {
+        if (userDao.getPasswordByUser(username) != null) {
+            throw new DatabaseException("User with name " + username + " already exists");
+        }
+        String hashedPasswordFromForm = hash(password);
+        userDao.saveNewUserToDB(username, hashedPasswordFromForm);
+    }
 }

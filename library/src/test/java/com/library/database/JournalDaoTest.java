@@ -1,5 +1,8 @@
 package com.library.database;
 
+import com.library.Utils;
+import com.library.domain.Book;
+import com.library.domain.Client;
 import com.library.domain.Journal;
 import org.junit.Test;
 
@@ -16,10 +19,17 @@ public class JournalDaoTest {
 
     @Test
     public void saveNewJournal() throws Exception {
-        Journal journal = Journal.random();
-        journalDao.saveOrUpdate(journal);
-        assertThat(journalDao.getById(journal.getId())).isNotNull();
-        journalDao.deleteById(journal.getId());
+        for (int i = 0; i < 30; i++) {
+            List<Book> books = new BookDao().getAll();
+            List<Client> clients = new ClientDao().getAll();
+            Journal journal = Journal.random()
+                    .withBook(Utils.randomElement(books))
+                    .withClient(Utils.randomElement(clients));
+            journal.withEndDate(journal.getStartDate().plusDays(journal.getBook().getBookType().getDaysBeforeFine()));
+            journalDao.saveOrUpdate(journal);
+            assertThat(journalDao.getById(journal.getId())).isNotNull();
+        }
+//        journalDao.deleteById(journal.getId());
     }
 
     @Test
