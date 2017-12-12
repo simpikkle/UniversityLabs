@@ -132,7 +132,10 @@ public class ReportsController extends BaseController implements Initializable {
     private List<Journal> getAllOutOfDate() {
         List<Journal> journals = new ArrayList<>();
         for (Journal journal : new JournalDao().getAll()) {
-            if (journal.getReturnDate() != null && journal.getReturnDate().isAfter(journal.getEndDate())) journals.add(journal);
+            if (journal.getReturnDate() != null
+                    && journal.getReturnDate().isAfter(journal.getEndDate())) {
+                journals.add(journal);
+            }
         }
         return journals;
     }

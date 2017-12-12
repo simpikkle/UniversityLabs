@@ -5,6 +5,7 @@ import org.apache.logging.log4j.LogManager;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 public class ReportWriter {
@@ -16,7 +17,7 @@ public class ReportWriter {
     public static void writeReport(String fileName, List<Journal> journals, String customInfo) {
 
         FileWriter fileWriter = null;
-        String FILE_HEADER = "Start date,End date,Return date,First Name,Last name,Book";
+        String FILE_HEADER = "Start date,End date,Return date,Fine,First Name,Last name,Book";
         try {
             fileWriter = new FileWriter(fileName);
             if (customInfo != null && !customInfo.isEmpty()) fileWriter.append(customInfo).append(NEW_LINE_SEPARATOR);
@@ -33,6 +34,13 @@ public class ReportWriter {
                 } else {
                     fileWriter.append(" ");
                 }
+                fileWriter.append(COMA_SEPARATOR);
+                long fine = (ChronoUnit.DAYS.between(journal.getEndDate(), journal.getReturnDate()))
+                        * journal.getBook().getBookType().getFinePerDay();
+                if (fine < 0) {
+                    fine = 0;
+                }
+                fileWriter.append(String.valueOf(fine));
                 fileWriter.append(COMA_SEPARATOR);
                 fileWriter.append(journal.getClient().getFirstName());
                 fileWriter.append(COMA_SEPARATOR);
@@ -54,4 +62,5 @@ public class ReportWriter {
             }
 
         }
-    }}
+    }
+}
