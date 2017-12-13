@@ -17,15 +17,49 @@ public class NedlerMead implements Lab {
 
     @Override
     public void run() {
-        Point v0 = new Point(-1.2, 1);
-        Point v1 = v0.plus(new Point(0.05, 0.05));
-        Point v2 = v0.plus(new Point(0.05, 0.0025));
-        expectedResult = 0.0;
-        precision = 0.00001;
-        assignBestGoodWorse(v0, v1, v2);
+        Point v0, v1, v2;
+        // Square
+//        v0 = new Point(0, 1);
+//        v1 = v0.plus(new Point(0.05, 0.05));
+//        v2 = v0.plus(new Point(0.05, 0.0025));
+//        expectedResult = 0.0;
+//        precision = 0.0000001;
 
+        // Rosenbrok
+//        v0 = new Point(-1.2, 1);
+//        v1 = v0.plus(new Point(0.05, 0.05));
+//        v2 = v0.plus(new Point(0.05, 0.0025));
+//        expectedResult = 0.0;
+//        precision = 0.000000000000001;
+
+//        // Asymmetric valley
+        v0 = new Point(0, -1);
+        v1 = v0.plus(new Point(0.05, 0.05));
+        v2 = v0.plus(new Point(0.05, 0.0025));
+        expectedResult = 0.199786;
+        precision = 0.00001;
+//
+//        // Pauell
+//        v0 = new Point(new double[]{3, -1, 0, 1});
+//        v1 = new Point(new double[]{1, 1, 1, 1});
+//        v2 = new Point(new double[]{5, 5, 5, 5});
+//        expectedResult = 0.0;
+//        precision = 0.00001;
+//
+////         Experimental
+//        v0 = new Point(new double[]{2.7, 90, 1500, 10});
+//        v1 = new Point(new double[]{1, 1, 1, 1});
+//        v2 = new Point(new double[]{1, 100, 1000, 50});
+//        expectedResult = 0.0;
+//        precision = 0.00001;
+
+        assignBestGoodWorse(v0, v1, v2);
+        runMethod();
+    }
+
+    private void runMethod() {
         int i = 0;
-        while (i++ < 200 && resultIsNotAchieved()) {
+        while (i++ < 2048 && resultIsNotAchieved()) {
             assignBestGoodWorse(best, good, worse);
             Point middle = findMiddle();
             double alpha = 1;
@@ -57,7 +91,7 @@ public class NedlerMead implements Lab {
             System.out.println(String.format("Iteration: %d. Best: %s. Function: %1.5f.", i, best, function(best)));
         }
         System.out.println("Best point: " + best);
-        System.out.println(String.format("Best function: %1.5f", function(best)));
+        System.out.println(String.format("Best function: %1.16f", function(best)));
     }
 
     private boolean resultIsNotAchieved() {
@@ -83,6 +117,8 @@ public class NedlerMead implements Lab {
     private double function(Point point) {
 //        return Functions.square(point);
 //        return Functions.rosenbrok(point);
-        return Functions.assymetricValley(point);
+        return Functions.asymmetricValley(point);
+//        return Functions.pauell(point);
+//        return Functions.experimental(point);
     }
 }

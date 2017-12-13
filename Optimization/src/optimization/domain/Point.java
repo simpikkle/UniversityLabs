@@ -14,6 +14,10 @@ public class Point {
         x[1] = second;
     }
 
+    public Point(double x[]) {
+        this.x = x;
+    }
+
     public Point minus(Point p) {
         Point result = new Point();
         int size = this.x.length;
@@ -71,7 +75,7 @@ public class Point {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("{");
         for (int i = 0; i < x.length; i++) {
-            stringBuilder.append(String.format(" x%d=%1.3f ", i, x[i]));
+            stringBuilder.append(String.format(" x%d=%1.8f ", i, x[i]));
         }
         stringBuilder.append("}");
         return stringBuilder.toString();
