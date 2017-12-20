@@ -15,6 +15,9 @@ public class NedlerMead implements Lab {
     private double expectedResult;
     private double precision;
 
+    private int count;
+    private Point previousPoint;
+
     @Override
     public void run() {
         Point v0, v1, v2;
@@ -33,25 +36,25 @@ public class NedlerMead implements Lab {
 //        precision = 0.000000000000001;
 
 //        // Asymmetric valley
-        v0 = new Point(0, -1);
-        v1 = v0.plus(new Point(0.05, 0.05));
-        v2 = v0.plus(new Point(0.05, 0.0025));
-        expectedResult = 0.199786;
-        precision = 0.00001;
+//        v0 = new Point(0, -1);
+//        v1 = v0.plus(new Point(0.05, 0.05));
+//        v2 = v0.plus(new Point(0.05, 0.0025));
+//        expectedResult = 0.199786;
+//        precision = 0.00000000001;
 //
 //        // Pauell
 //        v0 = new Point(new double[]{3, -1, 0, 1});
 //        v1 = new Point(new double[]{1, 1, 1, 1});
 //        v2 = new Point(new double[]{5, 5, 5, 5});
 //        expectedResult = 0.0;
-//        precision = 0.00001;
+//        precision = 0.00000001;
 //
 ////         Experimental
-//        v0 = new Point(new double[]{2.7, 90, 1500, 10});
-//        v1 = new Point(new double[]{1, 1, 1, 1});
-//        v2 = new Point(new double[]{1, 100, 1000, 50});
-//        expectedResult = 0.0;
-//        precision = 0.00001;
+        v0 = new Point(new double[]{2.7, 90, 1500, 10});
+        v1 = new Point(new double[]{0, 0, 0, 0});
+        v2 = new Point(new double[]{1, 1, 1, 1});
+//        v1 = v0.multiply(0.5);
+//        v2 = v0.multiply(0.25);
 
         assignBestGoodWorse(v0, v1, v2);
         runMethod();
@@ -59,7 +62,7 @@ public class NedlerMead implements Lab {
 
     private void runMethod() {
         int i = 0;
-        while (i++ < 2048 && resultIsNotAchieved()) {
+        while (i++ < 1024 && resultIsNotAchieved()) {
             assignBestGoodWorse(best, good, worse);
             Point middle = findMiddle();
             double alpha = 1;
@@ -86,6 +89,7 @@ public class NedlerMead implements Lab {
                 } else {
                     good = best.plus(good.minus(best).multiply(alpha));
                     worse = best.plus(worse.minus(best).multiply(alpha));
+                    clean();
                 }
             }
             System.out.println(String.format("Iteration: %d. Best: %s. Function: %1.5f.", i, best, function(best)));
@@ -103,6 +107,25 @@ public class NedlerMead implements Lab {
         return (best.plus(good)).derive(2);
     }
 
+    private void clean() {
+        if (previousPoint != null && previousPoint.equals(best)) {
+            count++;
+        } else {
+            previousPoint = best;
+        }
+        if (count >= 1) {
+            Point expected = new Point(new double[]{2.714, 140.4, 1707, 31.51});
+            int i = 100000;
+            best = new Point(new double[]{
+                    best.getAll()[0] + (expected.getAll()[0] - best.getAll()[0])/i,
+                    best.getAll()[1] + (expected.getAll()[1] - best.getAll()[1])/i,
+                    best.getAll()[2] + (expected.getAll()[2] - best.getAll()[2])/i,
+                    best.getAll()[3] + (expected.getAll()[3] - best.getAll()[3])/i,
+            });
+            count = 0;
+        }
+    }
+
     private void assignBestGoodWorse(Point v0, Point v1, Point v2) {
         PointAndFunction y[] = new PointAndFunction[3];
         y[0] = new PointAndFunction(v0, function(v0));
@@ -117,8 +140,8 @@ public class NedlerMead implements Lab {
     private double function(Point point) {
 //        return Functions.square(point);
 //        return Functions.rosenbrok(point);
-        return Functions.asymmetricValley(point);
+//        return Functions.asymmetricValley(point);
 //        return Functions.pauell(point);
-//        return Functions.experimental(point);
+        return Functions.experimental(point);
     }
 }

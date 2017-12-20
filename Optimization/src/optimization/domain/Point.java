@@ -38,7 +38,7 @@ public class Point {
         return result;
     }
 
-    public Point derive(int derivative) {
+    public Point derive(double derivative) {
         Point result = new Point();
         int size = this.x.length;
         result.x = new double[size];
