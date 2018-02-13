@@ -1,6 +1,6 @@
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Utils {
 
@@ -31,5 +31,25 @@ public class Utils {
             result.remove(secondIterator.next());
         }
         return result;
+    }
+
+    /**
+     * N*log(N)
+     */
+    public static String removeDuplicates(String string) {
+        Map<Character, Integer> letterIndex = new HashMap<>();
+        StringBuilder stringBuilder = new StringBuilder(string);
+        for (int i = 0; i < stringBuilder.length(); i++) {
+            Character currentChar = Character.toLowerCase(stringBuilder.charAt(i));
+            if (letterIndex.get(currentChar) == null) {
+                letterIndex.put(currentChar, i);
+            } else {
+                stringBuilder.deleteCharAt(letterIndex.get(currentChar));
+                stringBuilder.deleteCharAt(i - 1);
+                letterIndex = new HashMap<>();
+                i = -1;
+            }
+        }
+        return stringBuilder.toString();
     }
 }
