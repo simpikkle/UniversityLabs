@@ -1,5 +1,6 @@
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Utils {
 
@@ -19,5 +20,16 @@ public class Utils {
                 .sorted()
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Resulting list is empty, check your boundaries"));
+    }
+
+    public static <T> List<T> substractCollections(Iterator<T> firstIterator, Iterator<T> secondIterator) {
+        List<T> result = new ArrayList<>();
+        while (firstIterator.hasNext()) {
+            result.add(firstIterator.next());
+        }
+        while (secondIterator.hasNext()) {
+            result.remove(secondIterator.next());
+        }
+        return result;
     }
 }
