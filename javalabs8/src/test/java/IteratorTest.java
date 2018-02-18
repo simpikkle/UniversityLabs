@@ -1,3 +1,4 @@
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.*;
@@ -5,32 +6,66 @@ import java.util.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class IteratorTest {
+    private List<Integer> firstListInt;
+    private List<Integer> secondListInt;
+
+    private List<String> firstListString;
+    private List<String> secondListString;
+
+    @Before
+    public void setUpLists() {
+        firstListInt = new ArrayList<>(Arrays.asList(1, 3, 5, 2, 9));
+        secondListInt = new ArrayList<>(Arrays.asList(7, 5, 2, 4));
+
+        firstListString = new ArrayList<>(Arrays.asList("Unique", "Duplicate", "Another Unique"));
+        secondListString = new ArrayList<>(Arrays.asList("Duplicate", "Some other"));
+    }
 
     @Test
     public void iteratorIntTest() {
-        List<Integer> firstList = new ArrayList<>(Arrays.asList(1, 3, 5, 2, 9));
-        List<Integer> secondList = new ArrayList<>(Arrays.asList(7, 5, 2, 4));
+        Collections.sort(firstListInt);
+        Collections.sort(secondListInt);
 
-        Collections.sort(firstList);
-        Collections.sort(secondList);
+        Iterator<Integer> firstIterator = firstListInt.iterator();
+        Iterator<Integer> secondIterator = secondListInt.iterator();
 
-        Iterator<Integer> firstIterator = firstList.iterator();
-        Iterator<Integer> secondIterator = secondList.iterator();
-
-        assertThat(Utils.substractCollections(firstIterator, secondIterator)).containsExactly(1, 3, 9);
+        assertThat(Utils.substractCollections(firstIterator, secondIterator))
+                .containsExactly(1, 3, 9);
     }
 
     @Test
     public void iteratorStringTest() {
-        List<String> firstList = new ArrayList<>(Arrays.asList("Unique", "Duplicate", "Another Unique"));
-        List<String> secondList = new ArrayList<>(Arrays.asList("Duplicate", "Some other"));
+        Collections.sort(firstListString);
+        Collections.sort(secondListString);
 
-        Collections.sort(firstList);
-        Collections.sort(secondList);
+        Iterator<String> firstIterator = firstListString.iterator();
+        Iterator<String> secondIterator = secondListString.iterator();
 
-        Iterator<String> firstIterator = firstList.iterator();
-        Iterator<String> secondIterator = secondList.iterator();
+        assertThat(Utils.substractCollections(firstIterator, secondIterator))
+                .containsExactly("Another Unique", "Unique");
+    }
 
-        assertThat(Utils.substractCollections(firstIterator, secondIterator)).containsExactly("Another Unique", "Unique");
+    @Test
+    public void iteratorIntTestUsingStreams() {
+        Collections.sort(firstListInt);
+        Collections.sort(secondListInt);
+
+        Iterator<Integer> firstIterator = firstListInt.iterator();
+        Iterator<Integer> secondIterator = secondListInt.iterator();
+
+        assertThat(Utils.substractCollectionsUsingStreams(firstIterator, secondIterator))
+                .containsExactly(1, 3, 9);
+    }
+
+    @Test
+    public void iteratorStringTestUsingStreams() {
+        Collections.sort(firstListString);
+        Collections.sort(secondListString);
+
+        Iterator<String> firstIterator = firstListString.iterator();
+        Iterator<String> secondIterator = secondListString.iterator();
+
+        assertThat(Utils.substractCollectionsUsingStreams(firstIterator, secondIterator))
+                .containsExactly("Another Unique", "Unique");
     }
 }

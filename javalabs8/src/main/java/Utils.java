@@ -1,6 +1,10 @@
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 public class Utils {
 
@@ -31,6 +35,19 @@ public class Utils {
             result.remove(secondIterator.next());
         }
         return result;
+    }
+
+    public static <T> List<T> substractCollectionsUsingStreams(Iterator<T> firstIterator, Iterator<T> secondIterator) {
+        Iterable<T> firstIterable = () -> firstIterator;
+        Stream<T> firstStream = StreamSupport.stream(firstIterable.spliterator(), false);
+
+        Iterable<T> secondIterable = () -> secondIterator;
+        List<T> second = StreamSupport.stream(secondIterable.spliterator(), false)
+                .collect(Collectors.toList());
+
+        return firstStream
+                .filter(firstItem -> !second.contains(firstItem))
+                .collect(Collectors.toList());
     }
 
     /**
