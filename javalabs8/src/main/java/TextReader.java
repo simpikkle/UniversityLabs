@@ -25,6 +25,11 @@ public class TextReader {
         return map;
     }
 
+    public Map<Character, Long> getLettersStatistics() {
+        cleanText();
+        return Utils.countLettersInText(text);
+    }
+
     public Map<String, Long> countAdjectives() {
         return getStatistics(1, 1)
                 .entrySet()
@@ -42,10 +47,11 @@ public class TextReader {
         return new ArrayList(Arrays.asList(text.split(" ")));
     }
 
-    private void cleanText() {
+    public TextReader cleanText() {
         text = removeLineBreaks();
         text = removeExtraSpace();
         text = removeNonLetterCharacters();
+        return this;
     }
 
     private String removeLineBreaks() {

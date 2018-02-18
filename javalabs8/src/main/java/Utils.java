@@ -72,4 +72,13 @@ public class Utils {
         return new TreeMap<>(words.stream()
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting())));
     }
+
+    public static Map<Character, Long> countLettersInText(String text) {
+        return text.chars()
+                .mapToObj(character -> (char) character)
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+                .entrySet().stream()
+                .sorted(Comparator.comparing(Map.Entry::getValue, Comparator.reverseOrder()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (k, v) -> k, LinkedHashMap::new));
+    }
 }
