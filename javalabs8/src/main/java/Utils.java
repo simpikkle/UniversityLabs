@@ -1,7 +1,5 @@
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collector;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -68,5 +66,10 @@ public class Utils {
             }
         }
         return stringBuilder.toString();
+    }
+
+    public static Map<String, Long> countWordsInList(List<String> words) {
+        return new TreeMap<>(words.stream()
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting())));
     }
 }
