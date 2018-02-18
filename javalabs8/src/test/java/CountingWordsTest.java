@@ -1,3 +1,4 @@
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -17,5 +18,32 @@ public class CountingWordsTest {
         assertThat(map.get("one")).isEqualTo(2);
         assertThat(map.get("two")).isEqualTo(3);
         assertThat(map.get("three")).isEqualTo(1);
+    }
+
+    @Test
+    public void countWordsInText() {
+        TextReader reader = new TextReader("text.txt");
+        Map<String, Long> map = reader.getStatistics(1, 1);
+        map.forEach((key, value) -> System.out.println("[" + key + "]: " + value));
+        assertThat(map).containsKeys("сказала", "говорил", "Михайловна");
+        assertThat(map).doesNotContainKeys("и", "в", "к");
+    }
+
+    @Test
+    public void countMinLengthWordsInText() {
+        TextReader reader = new TextReader("text.txt");
+        Map<String, Long> map = reader.getStatistics(1, 1);
+        map.forEach((key, value) -> System.out.println("[" + key + "]: " + value));
+        assertThat(map).containsKeys("и", "в", "к");
+    }
+
+    @Test
+    @Ignore
+    public void countAdjectivesInText() {
+        TextReader reader = new TextReader("text.txt");
+        Map<String, Long> map = reader.countAdjectives();
+        map.forEach((key, value) -> System.out.println("[" + key + "]: " + value));
+        assertThat(map).containsKeys("французские", "молодые", "последний");
+        assertThat(map).doesNotContainKeys("главнокомандующему", "известие", "Михайловной");
     }
 }
