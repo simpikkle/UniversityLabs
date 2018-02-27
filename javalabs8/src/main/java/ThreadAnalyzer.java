@@ -1,4 +1,3 @@
-import javax.xml.soap.Text;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -20,10 +19,12 @@ public class ThreadAnalyzer {
         }
         List<ThreadInformation> threadList = new ArrayList<>();
         ThreadInformation threadInformation = new ThreadInformation();
+        boolean stackTrace = false;
         for (String line : inputList) {
             if (line.startsWith("Found")) {
                 break;
             } else if (line.startsWith("\"")) {
+                stackTrace = false;
                 if (threadInformation.getName() != null && threadInformation.getState() != null) {
                     threadList.add(threadInformation);
                 }
@@ -32,8 +33,10 @@ public class ThreadAnalyzer {
                 threadInformation.setTid(findByPattern(TID, line));
             } else if (line.contains("State")) {
                 threadInformation.setState(ThreadInformation.State.findByName(findByPattern(STATE, line)));
+                stackTrace = threadInformation.getState() == ThreadInformation.State.BLOCKED;
+            } else if (stackTrace && !line.isEmpty()) {
+                threadInformation.addToStackTrace(line);
             }
-
         }
         print(threadList);
     }
@@ -44,7 +47,7 @@ public class ThreadAnalyzer {
         System.out.println("\n\nGrouping by state: ");
         threadList.stream()
                 .collect(Collectors.groupingBy(thread -> thread.getState()))
-                .forEach((k,v) -> {
+                .forEach((k, v) -> {
                     System.out.println("\n" + k + ": ");
                     v.forEach(System.out::println);
                 });

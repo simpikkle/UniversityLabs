@@ -1,9 +1,12 @@
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class ThreadInformation {
     private String name;
     private State state;
     private String tid;
+    private List<String> stackTrace = new ArrayList<>();
 
     public State getState() {
         return state;
@@ -31,7 +34,17 @@ public class ThreadInformation {
 
     @Override
     public String toString() {
-        return name + " [" + state + "] (" + tid + ")";
+        return name + " [" + state + "] (" + tid + ")" + stackTraceForPrint();
+    }
+
+    private String stackTraceForPrint() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stackTrace.forEach(line -> stringBuilder.append("\n").append(line));
+        return stringBuilder.toString();
+    }
+
+    public void addToStackTrace(String line) {
+        stackTrace.add(line);
     }
 
     public enum State {
