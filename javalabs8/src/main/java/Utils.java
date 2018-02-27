@@ -81,4 +81,15 @@ public class Utils {
                 .sorted(Comparator.comparing(Map.Entry::getValue, Comparator.reverseOrder()))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (k, v) -> k, LinkedHashMap::new));
     }
+
+    public static List<String> grep(String filename, String textToFind) {
+        String text = new TextReader(filename).getText();
+        return grep(Arrays.asList(text.split("\n")), textToFind);
+    }
+
+    public static List<String> grep(List<String> stringList, String textToFind) {
+        List<String> modifiableList = new ArrayList<>(stringList);
+        modifiableList.removeIf(line -> !line.contains(textToFind));
+        return modifiableList;
+    }
 }
