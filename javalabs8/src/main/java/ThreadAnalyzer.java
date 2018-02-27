@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -29,10 +28,10 @@ public class ThreadAnalyzer {
                     threadList.add(threadInformation);
                 }
                 threadInformation = new ThreadInformation();
-                threadInformation.setName(findByPattern(NAME, line));
-                threadInformation.setTid(findByPattern(TID, line));
+                threadInformation.setName(Utils.findByPattern(NAME, line));
+                threadInformation.setTid(Utils.findByPattern(TID, line));
             } else if (line.contains("State")) {
-                threadInformation.setState(ThreadInformation.State.findByName(findByPattern(STATE, line)));
+                threadInformation.setState(ThreadInformation.State.findByName(Utils.findByPattern(STATE, line)));
                 stackTrace = threadInformation.getState() == ThreadInformation.State.BLOCKED;
             } else if (stackTrace && !line.isEmpty()) {
                 threadInformation.addToStackTrace(line);
@@ -47,19 +46,26 @@ public class ThreadAnalyzer {
         System.out.println("\n\nGrouping by state: ");
         threadList.stream()
                 .collect(Collectors.groupingBy(thread -> thread.getState()))
-                .forEach((k, v) -> {
-                    System.out.println("\n" + k + ": ");
-                    v.forEach(System.out::println);
+                .forEach((state, threads) -> {
+                    System.out.println("\n" + state + ": ");
+                    threads.forEach(thread -> {
+                        System.out.println(thread);
+                        if (thread.getLock() != null) {
+                            System.out.println("Blocked by: ");
+                            System.out.println(findThreadWithLock(threads, thread.getLock()));
+                            System.out.println();
+                        }
+                    });
                 });
     }
 
-    private static String findByPattern(Pattern pattern, String line) {
-        Matcher matcher = pattern.matcher(line);
-        if (matcher.find()) {
-            return matcher.group(1);
+    private static ThreadInformation findThreadWithLock(List<ThreadInformation> threads, String lock) {
+        for (ThreadInformation threadInformation: threads) {
+            if (threadInformation.getLocked().equals(lock)) {
+                return threadInformation;
+            }
         }
-        throw new IllegalStateException("Can't find parameter for pattern " + pattern.pattern()
-                + " in line " + line);
+        return null;
     }
 
 

@@ -1,12 +1,30 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class ThreadInformation {
+
+    private static Pattern LOCK = Pattern.compile("<(.*?)>");
+
     private String name;
     private State state;
     private String tid;
     private List<String> stackTrace = new ArrayList<>();
+    private String lock;
+    private String locked;
+
+    public String getLock() {
+        return lock;
+    }
+
+    public String getLocked() {
+        return locked;
+    }
+
+    public List<String> getStackTrace() {
+        return stackTrace;
+    }
 
     public State getState() {
         return state;
@@ -45,6 +63,12 @@ public class ThreadInformation {
 
     public void addToStackTrace(String line) {
         stackTrace.add(line);
+
+        if (line.contains("waiting to lock")) {
+            lock = Utils.findByPattern(LOCK, line);
+        } else if (line.contains("locked")) {
+            locked = Utils.findByPattern(LOCK, line);
+        }
     }
 
     public enum State {
