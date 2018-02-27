@@ -14,12 +14,7 @@ public class Grep {
         if (args.length < 1) {
             throw new IllegalArgumentException("Please, provide something to look for");
         }
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-        List<String> inputList = new ArrayList<>();
-        String line;
-        while( (line = bufferedReader.readLine()) != null ) {
-            inputList.add(line);
-        }
+        List<String> inputList = Utils.readFromSystemInput();
         Utils.grep(inputList, args[0]).forEach(System.out::println);
     }
 }

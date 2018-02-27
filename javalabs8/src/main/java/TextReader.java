@@ -43,6 +43,11 @@ public class TextReader {
     }
 
     @SuppressWarnings("unchecked")
+    public List<String> getLinesList() {
+        return new ArrayList(Arrays.asList(text.split("\n")));
+    }
+
+    @SuppressWarnings("unchecked")
     public List<String> getWordsList() {
         return new ArrayList(Arrays.asList(text.split(" ")));
     }

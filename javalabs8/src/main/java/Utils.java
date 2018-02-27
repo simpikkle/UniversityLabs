@@ -1,3 +1,6 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -91,5 +94,19 @@ public class Utils {
         List<String> modifiableList = new ArrayList<>(stringList);
         modifiableList.removeIf(line -> !line.contains(textToFind));
         return modifiableList;
+    }
+
+    public static List<String> readFromSystemInput() {
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+            List<String> inputList = new ArrayList<>();
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                inputList.add(line);
+            }
+            return inputList;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
