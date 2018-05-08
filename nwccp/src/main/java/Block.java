@@ -2,10 +2,12 @@ public class Block {
 
     private final int name;
 
-    int numberOfRepeats;
+    private int numberOfRepeats;
+    private int messageName;
 
-    public Block(int i) {
+    public Block(int i, int messageName) {
         this.name = i;
+        this.messageName = messageName;
     }
 
     public int getNumberOfRepeats() {
@@ -22,5 +24,13 @@ public class Block {
 
     public int getName() {
         return name;
+    }
+
+    public int getMessageName() {
+        return messageName;
+    }
+
+    public void setMessageName(int messageName) {
+        this.messageName = messageName;
     }
 }

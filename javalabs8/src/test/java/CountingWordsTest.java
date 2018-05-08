@@ -57,7 +57,7 @@ public class CountingWordsTest {
     }
 
     @Test
-    @Ignore
+//    @Ignore
     public void countAdjectivesInText() {
         TextReader reader = new TextReader("text.txt");
         Map<String, Long> map = reader.countAdjectives();

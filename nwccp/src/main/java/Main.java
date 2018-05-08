@@ -3,7 +3,7 @@ import java.util.*;
 public class Main {
 
     private static int numberOfBlocksInMessage = 4;
-    private static int numberOfMessage = 100000;
+    private static int numberOfMessage = 50;
 
     /**
      * Key - количество переспросов
@@ -25,7 +25,7 @@ public class Main {
                 .flatMap(Collection::stream)
                 .forEach(block -> addNumberOfRepeats(block.getNumberOfRepeats()));
 
-        repeats.entrySet().stream()
+        repeats.entrySet()
                 .forEach(entry -> System.out.println(entry.getKey() + "\t" + entry.getValue()));
     }
 
@@ -40,7 +40,7 @@ public class Main {
     private static List<Message> createListOfMessages(int numberOfMessages) {
         List<Message> messages = new ArrayList<>();
         for (int j = 0; j < numberOfMessages; j++) {
-            messages.add(new Message(numberOfBlocksInMessage));
+            messages.add(new Message(j, numberOfBlocksInMessage));
         }
         return messages;
     }
