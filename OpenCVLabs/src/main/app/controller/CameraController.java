@@ -7,11 +7,11 @@ import javafx.scene.image.ImageView;
 import main.app.Utils;
 import org.opencv.core.*;
 import org.opencv.core.Point;
-import org.opencv.highgui.Highgui;
-import org.opencv.highgui.VideoCapture;
+import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.objdetect.CascadeClassifier;
 import org.opencv.objdetect.Objdetect;
+import org.opencv.videoio.VideoCapture;
 
 import javax.swing.*;
 import java.awt.*;
@@ -37,7 +37,7 @@ public class CameraController {
     private boolean isHistogram = false;
     private boolean isDetect = false;
 
-    private Mat logo = Highgui.imread("src/main/resources/images/logo.png");
+    private Mat logo = Imgcodecs.imread("src/main/resources/images/logo.png");
 
     private ScheduledExecutorService timer;
     private VideoCapture capture = new VideoCapture();
@@ -154,7 +154,7 @@ public class CameraController {
         Platform.runLater(() -> nPeople.setText(String.valueOf(facesArray.length)));
         String distances = "";
         for (int i = 0; i < facesArray.length; i++) {
-            Core.rectangle(frame, facesArray[i].tl(), facesArray[i].br(), new Scalar(0, 255, 0, 255), 3);
+            Imgproc.rectangle(frame, facesArray[i].tl(), facesArray[i].br(), new Scalar(0, 255, 0, 255), 3);
             distances += i + ": " + calculateDistance(facesArray[i].br(), facesArray[i].tl()) + " sm\n";
         }
         String finalDistances = distances;
@@ -221,15 +221,15 @@ public class CameraController {
         for (int i = 1; i < histSize.get(0, 0)[0]; i++)
         {
             // B component or gray image
-            Core.line(histImage, new Point(bin_w * (i - 1), hist_h - Math.round(hist_b.get(i - 1, 0)[0])), new Point(
+            Imgproc.line(histImage, new Point(bin_w * (i - 1), hist_h - Math.round(hist_b.get(i - 1, 0)[0])), new Point(
                     bin_w * (i), hist_h - Math.round(hist_b.get(i, 0)[0])), new Scalar(255, 0, 0), 2, 8, 0);
             // G and R components (if the image is not in gray scale)
             if (!gray)
             {
-                Core.line(histImage, new Point(bin_w * (i - 1), hist_h - Math.round(hist_g.get(i - 1, 0)[0])),
+                Imgproc.line(histImage, new Point(bin_w * (i - 1), hist_h - Math.round(hist_g.get(i - 1, 0)[0])),
                         new Point(bin_w * (i), hist_h - Math.round(hist_g.get(i, 0)[0])), new Scalar(0, 255, 0), 2, 8,
                         0);
-                Core.line(histImage, new Point(bin_w * (i - 1), hist_h - Math.round(hist_r.get(i - 1, 0)[0])),
+                Imgproc.line(histImage, new Point(bin_w * (i - 1), hist_h - Math.round(hist_r.get(i - 1, 0)[0])),
                         new Point(bin_w * (i), hist_h - Math.round(hist_r.get(i, 0)[0])), new Scalar(0, 0, 255), 2, 8,
                         0);
             }
@@ -315,7 +315,7 @@ public class CameraController {
         Mat outputFrame = new Mat(frame.size(), CvType.CV_8UC3);
         outputFrame.put(0, 0, imageBytes);
         String filename = new Date().toString() + ".png";
-        Highgui.imwrite(filename, outputFrame);
+        Imgcodecs.imwrite(filename, outputFrame);
         ImageIcon image = new ImageIcon(filename);
     }
 }
